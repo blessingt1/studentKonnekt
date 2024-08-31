@@ -1,0 +1,15 @@
+//compand to post via terminal for unit testing 
+
+curl -X POST http://localhost:8000/api/v1/feedback/new \
+  -H "Content-Type: application/json" \
+  -d '{
+    "assignmentId": "64d6b0f5b9f1f3a5d6d0e7f2",
+    "feedback": "YOU JUST JUST MADE IT BUDDY WELL DONE!",
+    "lecturer": "Dr. Tiny DU TOIT"
+  }'
+
+  to view on the web
+  http://localhost:8000/api/v1/feedback/assignment/64d6b0f5b9f1f3a5d6d0e7f2
+
+//swagger
+  http://localhost:8000/swagger
