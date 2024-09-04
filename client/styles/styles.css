@@ -93,3 +93,16 @@ footer {
 .btn-container {
   margin-top: 20px;
 }
+
+
+  /* Styles for the search button */
+  .btn-secondary {
+    background-color: purple;
+    border-color: purple;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #800080; /* Darker shade of purple on hover */
+    border-color: #800080;
+  }
+  
