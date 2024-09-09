@@ -1,8 +1,9 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const User = require('../models/User');
-const argon2 = require('argon2');
-const jwt = require('jsonwebtoken');
+import express from 'express';
+import mongoose from 'mongoose';
+import User from '../models/User.js';
+import argon2 from 'argon2';
+import jwt from 'jsonwebtoken';
+
 
 const router = express.Router();
 
@@ -96,4 +97,4 @@ router.delete('/:userId', async (req, res, next) => {
     }
 });
 
-module.exports = router;
+export default router;
