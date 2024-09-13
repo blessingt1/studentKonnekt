@@ -49,4 +49,14 @@ router.get('/:assignmentId', (req, res, next) => {
     });
 });
 
+router.post('/Upload%20Video', (req, res, next) => {
+    const student = new User({
+        first_name,
+        last_name,
+        email,
+        password,
+        role
+    });
+    
+});
 module.exports = router;
