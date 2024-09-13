@@ -10,37 +10,49 @@ const router = express.Router();
 // register
 router.post('/register', async (req, res, next) => {
     try {
-        const existingUser = await User.findOne({ email: req.body.email }).exec();
+        const { first_name, last_name, email, password, role } = req.body;
 
-        if (existingUser) { // if user already exists
-            return res.status(402).json({
-                message: 'Email exists'
+        const existingUser = await User.findOne({ email }).exec();
+
+        if (existingUser) {
+            return res.status(409).json({
+                message: 'Email already exists'
             });
         }
 
         // Hash password with argon2
-        const hash = await argon2.hash(req.body.password);
+        const hash = await argon2.hash(password);
 
         const user = new User({
             _id: new mongoose.Types.ObjectId(),
-            email: req.body.email,
-            password: hash
+            first_name,
+            last_name,
+            email,
+            password: hash,
+            role
         });
 
         const result = await user.save();
         console.log(result);
         res.status(201).json({
-            message: 'User created.'
+            message: 'User created successfully',
+            userId: result._id
         });
 
     } catch (err) {
-        console.log(err);
+        console.error(err);
+        if (err.name === 'ValidationError') {
+            return res.status(400).json({
+                message: 'Invalid input',
+                errors: err.errors
+            });
+        }
         res.status(500).json({
-            error: err
+            message: 'Internal server error',
+            error: err.message
         });
     }
 });
-
 // login
 router.post('/login', async (req, res, next) => {
     try {
