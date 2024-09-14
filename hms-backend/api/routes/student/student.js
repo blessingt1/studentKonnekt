@@ -1,27 +1,27 @@
-const express = require('express');
-const router = express.Router();
-const mongoose = require('mongoose');
-const User = require('../../models/User');
-const Assignment = require('../../models/Assignment');
-const Video = require('../../models/Video');
-const path = require('path');
-const multer = require('multer');
+import express from 'express';
+import mongoose from 'mongoose';
+import path from 'path';
+import multer from 'multer';
 
+import User from '../../models/User.js';
+import Assignment from '../../models/Assignment.js';
+import Video from '../../models/Video.js';
+
+const router = express.Router();
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, 'uploads/ ')
+        cb(null, 'uploads/ ');
     },
     filename: function(req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
 });
 
 const file_filter = (req, file, cb) => {
-    if(file.mimetype.startsWith('video/')) {
+    if (file.mimetype.startsWith('video/')) {
         cb(null, true);
-    }
-    else {
+    } else {
         cb(new Error('Not a video file.'), false);
     }
 };
@@ -41,8 +41,7 @@ router.get('/View%20Assignments', (req, res, next) => {
         console.log(result);
         if (result.length >= 0) {
             res.status(200).json(result);
-        }
-        else {
+        } else {
             res.status(500).json({
                 message: 'No assignment found'
             });
@@ -54,7 +53,7 @@ router.get('/View%20Assignments', (req, res, next) => {
             error: err
         });
     });
-})
+});
 
 router.get('/:assignmentId', (req, res, next) => {
     const id = req.body.assignmentId;
@@ -62,10 +61,9 @@ router.get('/:assignmentId', (req, res, next) => {
     .exec()
     .then(result => {
         console.log(result);
-        if (result){
+        if (result) {
             res.status(200).json(result);
-        }
-        else {
+        } else {
             res.status(404).json({
                 message: 'No valid entry found for the provided ID'
             });
@@ -79,8 +77,8 @@ router.get('/:assignmentId', (req, res, next) => {
     });
 });
 
-router.post('/Upload%20Video', upload.single('video'), (req, res) => {
-    if(!req.file){
+router.post('/', upload.single('videoUrl'), (req, res) => {
+    if (!req.file) {
         res.status(400).json({
             message: 'No video file uploaded'
         });
@@ -88,19 +86,19 @@ router.post('/Upload%20Video', upload.single('video'), (req, res) => {
 
     try {
         const video = new Video({
-            fileName: req.body.filename,
-            filePath: req.body.path,
-            fileSize: req.body.size,
-            fileType: req.body.mimetype,
-            uploadedBy: req.params.userId
+            _id: new mongoose.Types.ObjectId,
+            assignmentId : req.body.assignmentId,
+            userId: req.body.userId,
+            videoUrl: req.file.path
         });
-        video.save()
+        video.save();
         res.status(201).json({
-            message: 'Video uploaded successfully'
+            message: 'Video uploaded successfully',
+            video: video
         });
-    }
-    catch(error) {
+    } catch (error) {
         res.status(400).json(error.message);
     }
 });
-module.exports = router;
+
+export default router;
