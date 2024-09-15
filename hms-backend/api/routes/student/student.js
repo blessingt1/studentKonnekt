@@ -6,6 +6,7 @@ import multer from 'multer';
 import User from '../../models/User.js';
 import Assignment from '../../models/Assignment.js';
 import Video from '../../models/Video.js';
+import Feedback from '../../models/Feedback.js';
 
 const router = express.Router();
 
@@ -56,7 +57,7 @@ router.get('/View%20Assignments', (req, res, next) => {
 });
 
 router.get('/:assignmentId', (req, res, next) => {
-    const id = req.body.assignmentId;
+    const id = req.params.assignmentId;
     Assignment.findById(id)
     .exec()
     .then(result => {
@@ -101,4 +102,65 @@ router.post('/', upload.single('videoUrl'), (req, res) => {
     }
 });
 
+// browse own submissions
+router.get('/', (req, res, next) => {
+    Video.find()
+    .exec()
+    .then(result => {
+        console.log(result);
+        if (result.length >= 0) {
+            res.status(200).json(result);
+        } else {
+            res.status(500).json({
+                message: 'No video(s) found'
+            });
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    });
+});
+
+router.get('/:videoId', (req, res, next) => {
+    const id = req.params.videoId;
+    Video.findById(id)
+    .exec()
+    .then(result => {
+        if(result) {
+            res.status(200).json(result);
+        }
+        else {
+            res.status(500).json({
+                message: 'No video with the provided video ID exists'
+            });
+        }
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });
+});
+
+// View feedback
+router.get('/', async (req, res) => {
+    try {
+        if (!req.user || req.user.role !== 2) {
+            return res.status(403).json({
+                message: 'Authentication failed due to role access control'
+            });
+        }
+        
+        const feedbacks = await Feedback.find({ userId: req.user._id });
+        res.status(200).json(feedbacks);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            error: 'Internal server error'
+        });
+    }
+});
 export default router;
