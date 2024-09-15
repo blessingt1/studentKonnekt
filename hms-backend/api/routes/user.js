@@ -60,7 +60,7 @@ router.post('/login', async (req, res, next) => {
 
         if (!user) {
             return res.status(401).json({
-                message: 'Auth failed'
+                message: 'Authentication failed'
             });
         }
 
@@ -76,13 +76,13 @@ router.post('/login', async (req, res, next) => {
             });
 
             return res.status(200).json({
-                message: 'Auth successful',
+                message: 'Authentication successful',
                 token: token
             });
         }
 
         res.status(401).json({
-            message: 'Auth failed'
+            message: 'Authentication failed'
         });
 
     } catch (err) {
