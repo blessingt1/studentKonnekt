@@ -1,8 +1,6 @@
 import express from 'express';
-import mongoose from 'mongoose';
-import path from 'path';
 import multer from 'multer';
-import Submission from '../../models/Submission.js';
+import path from 'path';
 import checkAuth from '../../middleware/check-auth.js';
 import studentCtrl from '../../controllers/studentController.js';
 
@@ -18,10 +16,11 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype.startsWith('video/')) {
+    const allowedTypes = ['video/mp4', 'video/quicktime', 'video/x-msvideo'];
+    if (allowedTypes.includes(file.mimetype)) {
         cb(null, true);
     } else {
-        cb(new Error('Not a video file.'), false);
+        cb(new Error('Invalid file type. Only MP4, MOV, and AVI are allowed.'), false);
     }
 };
 
@@ -29,78 +28,24 @@ const upload = multer({
     storage: storage,
     fileFilter: fileFilter,
     limits: {
-        fileSize: 1024 * 1024 * 100
+        fileSize: 200 * 1024 * 1024 // 200 MB
     }
 });
 
 // View Assignments
 router.get('/assignments', checkAuth, studentCtrl.getAllAssignments);
+
 // View Assignment by id
 router.get('/assignments/:assignmentId', checkAuth, studentCtrl.getAssignmentById);
 
 // Submit video
-router.post('/submit', checkAuth, upload.single('videoUrl'), async (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({
-            message: 'No video file uploaded'
-        });
-    }
-
-    try {
-        const video = new Submission({
-            _id: new mongoose.Types.ObjectId(),
-            assignmentId: req.body.assignmentId,
-            userId: req.user._id,
-            videoUrl: req.file.path
-        });
-        await video.save();
-        res.status(201).json({
-            message: 'Video uploaded successfully',
-            video: video
-        });
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-});
+router.post('/submit', checkAuth, upload.single('video'), studentCtrl.postSubmission);
 
 // Browse own submissions
-router.get('/submissions', checkAuth, async (req, res) => {
-    try {
-        const result = await Submission.find({ userId: req.user._id }).exec();
-        if (result.length > 0) {
-            res.status(200).json(result);
-        } else {
-            res.status(404).json({
-                message: 'No submissions found'
-            });
-        }
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            error: 'Internal server error'
-        });
-    }
-});
+router.get('/submissions', checkAuth, studentCtrl.getSubmissions);
 
 // Get submission by ID
-router.get('/submissions/:submissionId', checkAuth, async (req, res) => {
-    try {
-        const id = req.params.submissionId;
-        const result = await Submission.findOne({ _id: id, userId: req.user._id }).exec();
-        if (result) {
-            res.status(200).json(result);
-        } else {
-            res.status(404).json({
-                message: 'No submission found with the provided ID'
-            });
-        }
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            error: 'Internal server error'
-        });
-    }
-});
+router.get('/submissions/:submissionId', checkAuth, studentCtrl.getSubmissionById);
 
 // View feedback
 router.get('/feedback', checkAuth, studentCtrl.getFeedback);
