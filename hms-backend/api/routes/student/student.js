@@ -28,7 +28,7 @@ const upload = multer({
     storage: storage,
     fileFilter: fileFilter,
     limits: {
-        fileSize: 200 * 1024 * 1024 // 200 MB
+        fileSize: 200 * 1024 * 1024
     }
 });
 
@@ -38,8 +38,11 @@ router.get('/assignments', checkAuth, studentCtrl.getAllAssignments);
 // View Assignment by id
 router.get('/assignments/:assignmentId', checkAuth, studentCtrl.getAssignmentById);
 
-// Submit video
-router.post('/submit', checkAuth, upload.single('video'), studentCtrl.postSubmission);
+// Submit selected video
+router.post('/submit-selected', checkAuth, upload.single('video'), studentCtrl.postSubmitSelectedVideo);
+
+// Submit recorded video
+router.post('/submit-recorded', checkAuth, upload.single('video'), studentCtrl.postSubmitRecordedVideo);
 
 // Browse own submissions
 router.get('/submissions', checkAuth, studentCtrl.getSubmissions);

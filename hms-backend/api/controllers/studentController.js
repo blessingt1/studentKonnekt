@@ -3,9 +3,11 @@ import Assignment from '../models/Assignment.js';
 import Submission from '../models/Submission.js';
 import { USER_ROLES } from '../models/User.js';
 import mongoose from 'mongoose';
-import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs/promises';
 import path from 'path';
+import ffmpeg from 'fluent-ffmpeg';
+import ffmpegInstaller from '@ffmpeg-installer/ffmpeg';
+ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
 export default {
     getFeedback: async (req, res) => {
@@ -60,7 +62,7 @@ export default {
             });
         }
     },
-    postSubmission: async (req, res) => {
+    postSubmitSelectedVideo: async (req, res) => {
         if (!req.file) {
             return res.status(400).json({ message: 'No video file uploaded' });
         }
@@ -71,16 +73,43 @@ export default {
             const submission = new Submission({
                 assignmentId: req.body.assignmentId,
                 userId: req.user._id,
-                videoUrl: compressedFilePath
+                videoUrl: compressedFilePath,
+                submissionType: 'selected'
             });
             await submission.save();
 
             res.status(201).json({
-                message: 'Video uploaded and compressed successfully',
+                message: 'Selected video uploaded and compressed successfully',
                 submission: submission
             });
         } catch (error) {
-            console.error('Submission failed:', error);
+            console.error('Selected video submission failed:', error);
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    postSubmitRecordedVideo: async (req, res) => {
+        if (!req.file) {
+            return res.status(400).json({ message: 'No video file uploaded' });
+        }
+
+        try {
+            const compressedFilePath = await compressVideo(req.file.path);
+            
+            const submission = new Submission({
+                assignmentId: req.body.assignmentId,
+                userId: req.user._id,
+                videoUrl: compressedFilePath,
+                submissionType: 'recorded'
+            });
+            await submission.save();
+
+            res.status(201).json({
+                message: 'Recorded video uploaded and compressed successfully',
+                submission: submission
+            });
+        } catch (error) {
+            console.error('Recorded video submission failed:', error);
             res.status(500).json({ error: error.message });
         }
     },
