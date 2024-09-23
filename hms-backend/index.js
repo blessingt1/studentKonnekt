@@ -12,7 +12,7 @@ const port = 8000; // Define the port on which the server will listen
 
 // MongoDB database connection
 MongoClient.connect(
-    process.env.URI, // MongoDB URI from environment variables
+    "mongodb+srv://admin:connectAdmin@cluster0.gx4dh.mongodb.net/", // MongoDB URI from environment variables
     {
         maxPoolSize: 50, // Maximum number of connections in the connection pool
         wtimeoutMS: 2500, // Timeout in milliseconds for write operations
@@ -25,6 +25,9 @@ MongoClient.connect(
     process.exit(1); // Exit the process if the connection fails
 })
 .then(async client => {
+    // Log a message when successfully connected to Cluster 0
+    console.log("Successfully connected to Cluster 0");
+
     // Initialize DAO with the connected MongoDB client
     await FeedbackDAO.injectDB(client);
 
