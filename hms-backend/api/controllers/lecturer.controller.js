@@ -17,11 +17,17 @@ export const createAssignment = async (req, res) => {
         const newAssignment = new Assignment({ title, description, dueDate, subject, createdBy });
         await newAssignment.save();
 
-        res.status(201).json(newAssignment);
+        // Explicitly return the assignmentId (_id) in the response
+        res.status(201).json({
+            message: 'Assignment created successfully',
+            assignmentId: newAssignment._id, // This is the generated assignment ID
+            assignment: newAssignment // we can also return the entire assignment object if needed later
+        });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
+
 
 // View submissions for an assignment
 export const viewSubmissions = async (req, res) => {
