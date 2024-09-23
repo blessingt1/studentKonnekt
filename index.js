@@ -25,6 +25,8 @@ MongoClient.connect(
     process.exit(1); // Exit the process if the connection fails
 })
 .then(async client => {
+    console.log("Successfully connected to cluster0"); //log message for successful connection
+    
     // Initialize DAO with the connected MongoDB client
     await FeedbackDAO.injectDB(client);
 

@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
-import feedback from "./api/routes/feedback.route.js";
+import feedback from './api/routes/feedback.routes.js'; // Feedback routes
+import assignmentRoutes from './api/routes/lecturer.routes.js'; // Assignment routes
 
 // Derive the filename and directory name from the ES module URL
 const __filename = fileURLToPath(import.meta.url);
@@ -18,6 +19,9 @@ app.use(express.json());
 
 // Define routes for the feedback API
 app.use("/api/v1/feedback", feedback);
+
+// Define routes for the assignment API
+app.use("/api/v1/lecturer/assignments", assignmentRoutes);
 
 // Serve the Swagger/OpenAPI specification
 app.use('/swagger', (req, res) => {
