@@ -1,7 +1,8 @@
-import Assignment from '../models/assignment.model.js';
+//import Assignment from '../models/assignment.model.js';
 import Submission from '../models/submission.model.js'; 
 import User from '../models/User.js';
 
+/*
 // Create an assignment
 export const createAssignment = async (req, res) => {
     try {
@@ -34,9 +35,9 @@ export const viewSubmissions = async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-};
+};*/ //removed cause it was better to have an assignment controller and route.
 
-// Stream a video submission
+// Stream a video submission...
 export const streamVideo = async (req, res) => {
     try {
         const { submissionId } = req.params;

@@ -1,39 +1,18 @@
-import app from "./index.js";
-import mongodb from "mongodb";
-//import FeedbackDAO from "./dao/feedbackDAO.js";
-import * as dotenv from "dotenv";
+import express from 'express';
+import { createAssignment, viewSubmissions, streamVideo, provideFeedback } from '../controllers/lecturer.controller.js'; // Import the relevant controller functions
 
-// Load environment variables from .env file
-dotenv.config();
+const router = express.Router();
 
-const MongoClient = mongodb.MongoClient;
+// Define the route for creating assignments
+router.post('/assignments', createAssignment);
 
-const port = 8000; // Define the port on which the server will listen
+// Define the route for viewing submissions
+router.get('/assignments/:id/submissions', viewSubmissions);
 
-// MongoDB database connection
-MongoClient.connect(
-    process.env.URI, // MongoDB URI from environment variables
-    {
-        maxPoolSize: 50, // Maximum number of connections in the connection pool
-        wtimeoutMS: 2500, // Timeout in milliseconds for write operations
-        // useNewUrlParser: true, // Optional: Not required for newer MongoDB versions
-    }
-)
-.catch(err => {
-    // Log any errors that occur during connection
-    console.error("Failed to connect to MongoDB:", err.stack);
-    process.exit(1); // Exit the process if the connection fails
-})
-.then(async client => {
-    // Initialize DAO with the connected MongoDB client
-    await FeedbackDAO.injectDB(client);
+// Define the route for streaming video submissions
+router.get('/submissions/:submissionId/stream', streamVideo);
 
-    // Start the server and listen on the specified port
-    app.listen(port, () => {
-        console.log(`Server is listening on port ${port}`);
-    });
-});
+// Define the route for providing feedback on a submission
+router.post('/submissions/feedback', provideFeedback);
 
-
-
-
+export default router;
