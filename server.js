@@ -1,53 +1,32 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
-import mongoose from "mongoose";
 import { fileURLToPath } from "url";
-import dotenv from "dotenv";
+import feedback from "./api/routes/feedback.route.js";
 
-// Load environment variables from .env
-dotenv.config();
-
-// Corrected path for lecturer routes
-import lecturerRoutes from './api/routes/lecturer/lecturer.routes.js';
-
+// Derive the filename and directory name from the ES module URL
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// Middleware to enable Cross-Origin Resource Sharing (CORS)
 app.use(cors());
+
+// Middleware to parse incoming JSON requests
 app.use(express.json());
 
-// Mount the lecturer routes
-app.use("/api/v1/lecturer", lecturerRoutes);
+// Define routes for the feedback API
+app.use("/api/v1/feedback", feedback);
 
-// Serve Swagger documentation
+// Serve the Swagger/OpenAPI specification
 app.use('/swagger', (req, res) => {
+    // Specify the path to the Swagger/OpenAPI file located in the 'docs' folder
     res.sendFile(path.join(__dirname, 'docs', 'swagger.yaml'));
 });
 
-// Catch-all route for 404 errors
+// Catch-all route for handling 404 errors (not found)
 app.use("*", (req, res) => res.status(404).json({ error: "not found" }));
 
-// MongoDB connection string from the .env file
-const mongoURI = process.env.MONGODB_URI || "mongodb://localhost:27017/yourDatabaseName";
-
-// Connect to MongoDB with Mongoose
-mongoose.connect(mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => {
-    console.log("MongoDB connected successfully");
-
-    const PORT = process.env.PORT || 8000;
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-    });
-})
-.catch((error) => {
-    console.error("MongoDB connection error:", error);
-});
-
+// Export the app for use in other modules or for starting the server
 export default app;

@@ -1,8 +1,8 @@
 import express from 'express';
-import createAssignmentRoutes from './createAssignments.js';
-import viewSubmissionsRoutes from './viewSubmissions.js';
+import createAssignmentRoutes from './createAssignment.routes.js';
+import viewSubmissionsRoutes from './viewSubmissions.routes.js';
 import streamVideoRoutes from './streamVideo.routes.js';
-import provideFeedbackRoutes from './provideFeedback.js';
+import provideFeedbackRoutes from './provideFeedback.routes.js';
 
 const router = express.Router();
 
