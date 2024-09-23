@@ -91,10 +91,9 @@ export default {
             const compressedFilePath = await compressVideo(req.file.path);
             
             const submission = new Submission({
-                assignmentId: req.body.assignmentId,
-                userId: req.body.userId || req.user._id,
-                videoUrl: compressedFilePath,
-                submissionType: 'selected'
+                assignment: req.body.assignmentId,
+                student: req.body.userId || req.user._id,
+                videoPath: compressedFilePath,
             });
             await submission.save();
 
@@ -122,10 +121,9 @@ export default {
             const compressedFilePath = await compressVideo(req.file.path);
             
             const submission = new Submission({
-                assignmentId: req.body.assignmentId,
-                userId: req.body.userId || req.user._id,
-                videoUrl: compressedFilePath,
-                submissionType: 'recorded'
+                assignment: req.body.assignmentId,
+                student: req.body.userId || req.user._id,
+                videoPath: compressedFilePath,
             });
             await submission.save();
 
