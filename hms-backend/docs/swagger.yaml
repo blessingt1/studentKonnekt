@@ -1,101 +1,12 @@
 openapi: 3.0.0
 info:
-  title: Feedback API
-  description: API for managing feedback
+  title: Lecturer API
+  description: API for managing assignments, submissions, and feedback by lecturers
   version: 1.0.0
 paths:
-  /feedbacks:
-    get:
-      summary: Retrieve all feedbacks
-      responses:
-        '200':
-          description: A list of feedbacks
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    assignmentId:
-                      type: string
-                      example: "64d6b0f5b9f1f3a5d6d0e7f2"
-                    lecturer:
-                      type: string
-                      example: "Dr. Tiny DU TOIT"
-                    feedback:
-                      type: string
-                      example: "YOU JUST MADE IT BUDDY WELL DONE!"
-                description: A list of feedback objects
-        '500':
-          description: Server error
-
-  /feedback/assignment/{id}:
-    get:
-      summary: Retrieve feedback by assignment ID
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Feedback retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    assignmentId:
-                      type: string
-                    feedback:
-                      type: string
-                    lecturer:
-                      type: string
-        '404':
-          description: Feedback not found
-        '500':
-          description: Server error
-
-  /feedback/{id}:
-    get:
-      summary: Get feedback by ID
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Feedback retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  assignmentId:
-                    type: string
-                  feedback:
-                    type: string
-                  lecturer:
-                    type: string
-        '404':
-          description: Feedback not found
-        '500':
-          description: Server error
-
-    put:
-      summary: Update feedback by ID
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
+  /assignments:
+    post:
+      summary: Create a new assignment
       requestBody:
         required: true
         content:
@@ -103,32 +14,147 @@ paths:
             schema:
               type: object
               properties:
-                feedback:
+                title:
                   type: string
-                  example: "Updated feedback text"
-                lecturer:
+                  example: "Assignment 1"
+                description:
                   type: string
-                  example: "Updated lecturer name"
+                  example: "Write a short essay on OpenAPI."
+                dueDate:
+                  type: string
+                  format: date
+                  example: "2024-12-01"
+                subject:
+                  type: string
+                  example: "API Design"
+                createdBy:
+                  type: string
+                  example: "lecturerId123"
       responses:
-        '200':
-          description: Feedback updated successfully
-        '404':
-          description: Feedback not found
+        '201':
+          description: Assignment created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Assignment created successfully"
+                  assignmentId:
+                    type: string
+                    example: "64f8d3fca2b930001b02c647"  # Example generated assignment ID
+                  assignment:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: "64f8d3fca2b930001b02c647"
+                      title:
+                        type: string
+                        example: "Assignment 1"
+                      description:
+                        type: string
+                        example: "Write a short essay on OpenAPI."
+                      dueDate:
+                        type: string
+                        format: date
+                        example: "2024-12-01"
+                      subject:
+                        type: string
+                        example: "API Design"
+                      createdBy:
+                        type: string
+                        example: "lecturerId123"
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: "2024-09-21T08:40:28.129Z"
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: "2024-09-21T08:40:28.129Z"
+        '403':
+          description: Only lecturers can create assignments
         '500':
           description: Server error
 
-    delete:
-      summary: Delete feedback by ID
+
+  /assignments/{assignmentId}/submissions:
+    get:
+      summary: View submissions for an assignment
       parameters:
-        - name: id
+        - name: assignmentId
           in: path
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: Feedback deleted successfully
+          description: Submissions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    student:
+                      type: string
+                      example: "studentId123"
+                    submission:
+                      type: string
+                      example: "essay.pdf"
         '404':
-          description: Feedback not found
+          description: Submissions not found
+        '500':
+          description: Server error
+
+  /submissions/{submissionId}/stream:
+    get:
+      summary: Stream a video submission
+      parameters:
+        - name: submissionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Video streamed successfully
+        '404':
+          description: Submission not found
+        '500':
+          description: Server error
+
+  /submissions/feedback:
+    post:
+      summary: Provide feedback on a submission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                submissionId:
+                  type: string
+                  example: "submissionId123"
+                feedback:
+                  type: string
+                  example: "Great job!"
+                marks:
+                  type: number
+                  example: 85
+                lecturerId:
+                  type: string
+                  example: "lecturerId123"
+      responses:
+        '200':
+          description: Feedback provided successfully
+        '403':
+          description: Only lecturers can provide feedback
+        '404':
+          description: Submission not found
         '500':
           description: Server error
