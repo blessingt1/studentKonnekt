@@ -12,7 +12,7 @@ const port = 8000; // Define the port on which the server will listen
 
 // MongoDB database connection
 MongoClient.connect(
-    process.env.URI, // MongoDB URI from environment variables
+    "mongodb+srv://dummy:connectSK24@cluster0.gx4dh.mongodb.net/", // MongoDB URI
     {
         maxPoolSize: 50, // Maximum number of connections in the connection pool
         wtimeoutMS: 2500, // Timeout in milliseconds for write operations
