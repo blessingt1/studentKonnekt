@@ -9,16 +9,18 @@ import ffmpeg from 'fluent-ffmpeg';
 import ffmpegInstaller from '@ffmpeg-installer/ffmpeg';
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
+const isAllowedRole = (role) => role === USER_ROLES.ADMIN || role === USER_ROLES.STUDENT;
+
 export default {
     getFeedback: async (req, res) => {
         try {
-            if (!req.user || req.user.role !== USER_ROLES.STUDENT) {
+            if (!isAllowedRole(req.user.role)) {
                 return res.status(403).json({
-                    message: 'Authentication failed due to role access control'
+                    message: 'Access denied'
                 });
             }
             
-            const feedbacks = await Feedback.find({ userId: req.user._id });
+            const feedbacks = await Feedback.find();
             res.status(200).json(feedbacks);
         } catch (err) {
             console.error(err);
@@ -29,6 +31,12 @@ export default {
     },
     getAllAssignments: async (req, res) => {
         try {
+            if (!isAllowedRole(req.user.role)) {
+                return res.status(403).json({
+                    message: 'Access denied'
+                });
+            }
+
             const result = await Assignment.find().exec();
             if (result.length > 0) {
                 res.status(200).json(result);
@@ -46,6 +54,12 @@ export default {
     },
     getAssignmentById: async (req, res) => {
         try {
+            if (!isAllowedRole(req.user.role)) {
+                return res.status(403).json({
+                    message: 'Access denied'
+                });
+            }
+
             const id = req.params.assignmentId;
             const result = await Assignment.findById(id).exec();
             if (result) {
@@ -63,6 +77,12 @@ export default {
         }
     },
     postSubmitSelectedVideo: async (req, res) => {
+        if (!isAllowedRole(req.user.role)) {
+            return res.status(403).json({
+                message: 'Access denied'
+            });
+        }
+
         if (!req.file) {
             return res.status(400).json({ message: 'No video file uploaded' });
         }
@@ -72,7 +92,7 @@ export default {
             
             const submission = new Submission({
                 assignmentId: req.body.assignmentId,
-                userId: req.user._id,
+                userId: req.body.userId || req.user._id,
                 videoUrl: compressedFilePath,
                 submissionType: 'selected'
             });
@@ -87,8 +107,13 @@ export default {
             res.status(500).json({ error: error.message });
         }
     },
-
     postSubmitRecordedVideo: async (req, res) => {
+        if (!isAllowedRole(req.user.role)) {
+            return res.status(403).json({
+                message: 'Access denied'
+            });
+        }
+
         if (!req.file) {
             return res.status(400).json({ message: 'No video file uploaded' });
         }
@@ -98,7 +123,7 @@ export default {
             
             const submission = new Submission({
                 assignmentId: req.body.assignmentId,
-                userId: req.user._id,
+                userId: req.body.userId || req.user._id,
                 videoUrl: compressedFilePath,
                 submissionType: 'recorded'
             });
@@ -115,7 +140,13 @@ export default {
     },
     getSubmissions: async (req, res) => {
         try {
-            const result = await Submission.find({ userId: req.user._id }).exec();
+            if (!isAllowedRole(req.user.role)) {
+                return res.status(403).json({
+                    message: 'Access denied'
+                });
+            }
+
+            const result = await Submission.find().exec();
             if (result.length > 0) {
                 res.status(200).json(result);
             } else {
@@ -132,8 +163,14 @@ export default {
     },
     getSubmissionById: async (req, res) => {
         try {
+            if (!isAllowedRole(req.user.role)) {
+                return res.status(403).json({
+                    message: 'Access denied'
+                });
+            }
+
             const id = req.params.submissionId;
-            const result = await Submission.findOne({ _id: id, userId: req.user._id }).exec();
+            const result = await Submission.findById(id).exec();
             if (result) {
                 res.status(200).json(result);
             } else {

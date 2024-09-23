@@ -32,25 +32,28 @@ const upload = multer({
     }
 });
 
+// Apply checkAuth middleware to all routes
+router.use(checkAuth);
+
 // View Assignments
-router.get('/assignments', checkAuth, studentCtrl.getAllAssignments);
+router.get('/assignments', studentCtrl.getAllAssignments);
 
 // View Assignment by id
-router.get('/assignments/:assignmentId', checkAuth, studentCtrl.getAssignmentById);
+router.get('/assignments/:assignmentId', studentCtrl.getAssignmentById);
 
 // Submit selected video
-router.post('/submit-selected', checkAuth, upload.single('video'), studentCtrl.postSubmitSelectedVideo);
+router.post('/submit-selected', upload.single('video'), studentCtrl.postSubmitSelectedVideo);
 
 // Submit recorded video
-router.post('/submit-recorded', checkAuth, upload.single('video'), studentCtrl.postSubmitRecordedVideo);
+router.post('/submit-recorded', upload.single('video'), studentCtrl.postSubmitRecordedVideo);
 
-// Browse own submissions
-router.get('/submissions', checkAuth, studentCtrl.getSubmissions);
+// Browse submissions
+router.get('/submissions', studentCtrl.getSubmissions);
 
 // Get submission by ID
-router.get('/submissions/:submissionId', checkAuth, studentCtrl.getSubmissionById);
+router.get('/submissions/:submissionId', studentCtrl.getSubmissionById);
 
 // View feedback
-router.get('/feedback', checkAuth, studentCtrl.getFeedback);
+router.get('/feedback', studentCtrl.getFeedback);
 
 export default router;

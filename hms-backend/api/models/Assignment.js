@@ -8,4 +8,4 @@ const assignmentSchema = new mongoose.Schema({
     due_date: {type: Date, required: true}
 });
 
-export default mongoose.model('Assignment', assignmentSchema);
+export default mongoose.model('Assignment', assignmentSchema); 
