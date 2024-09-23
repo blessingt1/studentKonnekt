@@ -1,20 +1,27 @@
-/*const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const User = {
-    _id: mongoose.Schema.Types.ObjectId,
-    username: {type: String, require: true},
-    password: 
-}*/
+export const USER_ROLES = {
+    ADMIN: 0,
+    LECTURER: 1,
+    STUDENT: 2
+};
 
-const mongoose = require('mongoose');
-
-const userSchema = new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    role: { type: String, enum: ['student', 'lecturer', 'admin'], required: true }
+module.exports = mongoose.Schema({
+    first_name: {type: String, required: true},
+    last_name: {type: String, required: true},
+    email: {type: String, required: true, unique: true},
+    password: {type: String, required: true},
+    role: {
+        type: Number, 
+        enum: Object.values(USER_ROLES),
+        required: true,
+        validate: {
+            validator: function(x) {
+                return Object.values(USER_ROLES).includes(x);
+            },
+            message: props => `${props.value} is not a valid role`
+        }
+    }
 });
 
-const User = mongoose.model('User', userSchema);
-
-module.exports = User;
+export default mongoose.model('User', userSchema);
