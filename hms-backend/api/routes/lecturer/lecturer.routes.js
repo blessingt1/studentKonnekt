@@ -1,5 +1,5 @@
 import express from 'express';
-import { createAssignment, viewSubmissions, streamVideo, provideFeedback } from '../controllers/lecturer.controller.js'; // Import the relevant controller functions
+import { createAssignment, viewSubmissions, streamVideo, provideFeedback } from '../../controllers/lecturer.controller.js'; // Import the relevant controller functions
 
 const router = express.Router();
 

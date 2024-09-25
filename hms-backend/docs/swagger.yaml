@@ -1,10 +1,112 @@
 openapi: 3.0.0
 info:
-  title: Lecturer API
-  description: API for managing assignments, submissions, and feedback by lecturers
+  title: Student Konnekt API
   version: 1.0.0
+  description: API documentation for the Home Management System, covering user authentication, assignments, feedback, submissions, and video management.
+
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Local development server
+
 paths:
+  /users/register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                role:
+                  type: integer
+                  enum: [0, 1, 2] # ADMIN, LECTURER, STUDENT
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  userId:
+                    type: string
+        '400':
+          description: Invalid input
+        '409':
+          description: Email already exists
+
+  /users/login:
+    post:
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  token:
+                    type: string
+        '401':
+          description: Authentication failed
+
+  /users/{userId}:
+    delete:
+      summary: Delete a user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the user to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User deleted
+        '404':
+          description: User not found
+
   /assignments:
+    get:
+      summary: Get all assignments
+      responses:
+        '200':
+          description: A list of assignments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Assignment'
+
     post:
       summary: Create a new assignment
       requestBody:
@@ -16,99 +118,101 @@ paths:
               properties:
                 title:
                   type: string
-                  example: "Assignment 1"
                 description:
                   type: string
-                  example: "Write a short essay on OpenAPI."
-                dueDate:
-                  type: string
-                  format: date
-                  example: "2024-12-01"
                 subject:
                   type: string
-                  example: "API Design"
-                createdBy:
+                due_date:
                   type: string
-                  example: "lecturerId123"
+                  format: date
       responses:
         '201':
           description: Assignment created successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Assignment created successfully"
-                  assignmentId:
-                    type: string
-                    example: "64f8d3fca2b930001b02c647"  # Example generated assignment ID
-                  assignment:
-                    type: object
-                    properties:
-                      _id:
-                        type: string
-                        example: "64f8d3fca2b930001b02c647"
-                      title:
-                        type: string
-                        example: "Assignment 1"
-                      description:
-                        type: string
-                        example: "Write a short essay on OpenAPI."
-                      dueDate:
-                        type: string
-                        format: date
-                        example: "2024-12-01"
-                      subject:
-                        type: string
-                        example: "API Design"
-                      createdBy:
-                        type: string
-                        example: "lecturerId123"
-                      createdAt:
-                        type: string
-                        format: date-time
-                        example: "2024-09-21T08:40:28.129Z"
-                      updatedAt:
-                        type: string
-                        format: date-time
-                        example: "2024-09-21T08:40:28.129Z"
-        '403':
-          description: Only lecturers can create assignments
-        '500':
-          description: Server error
+        '400':
+          description: Invalid input
 
-
-  /assignments/{assignmentId}/submissions:
+  /assignments/{assignmentId}:
     get:
-      summary: View submissions for an assignment
+      summary: Get an assignment by ID
       parameters:
         - name: assignmentId
           in: path
           required: true
+          description: ID of the assignment to retrieve
           schema:
             type: string
       responses:
         '200':
-          description: Submissions retrieved successfully
+          description: Assignment details
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    student:
-                      type: string
-                      example: "studentId123"
-                    submission:
-                      type: string
-                      example: "essay.pdf"
+                $ref: '#/components/schemas/Assignment'
         '404':
-          description: Submissions not found
-        '500':
-          description: Server error
+          description: Assignment not found
+
+  /feedback:
+    post:
+      summary: Create feedback for an assignment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                assignmentId:
+                  type: string
+                lecturer:
+                  type: string
+                feedback:
+                  type: string
+                mark:
+                  type: number
+      responses:
+        '201':
+          description: Feedback created successfully
+        '400':
+          description: Invalid input
+
+  /feedback/{assignmentId}/download:
+    get:
+      summary: Download marks and feedback for a specific assignment
+      parameters:
+        - name: assignmentId
+          in: path
+          required: true
+          description: ID of the assignment to download feedback for
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Marks and feedback downloaded successfully
+        '404':
+          description: No feedback found for this assignment
+
+  /submissions:
+    post:
+      summary: Submit a video for an assignment
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                assignmentId:
+                  type: string
+                userId:
+                  type: string
+                video:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Video submitted successfully
+        '400':
+          description: Invalid input
 
   /submissions/{submissionId}/stream:
     get:
@@ -117,44 +221,34 @@ paths:
         - name: submissionId
           in: path
           required: true
+          description: ID of the submission to stream
           schema:
             type: string
       responses:
         '200':
-          description: Video streamed successfully
+          description: Video streaming successfully
         '404':
           description: Submission not found
-        '500':
-          description: Server error
 
-  /submissions/feedback:
-    post:
-      summary: Provide feedback on a submission
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                submissionId:
-                  type: string
-                  example: "submissionId123"
-                feedback:
-                  type: string
-                  example: "Great job!"
-                marks:
-                  type: number
-                  example: 85
-                lecturerId:
-                  type: string
-                  example: "lecturerId123"
-      responses:
-        '200':
-          description: Feedback provided successfully
-        '403':
-          description: Only lecturers can provide feedback
-        '404':
-          description: Submission not found
-        '500':
-          description: Server error
+components:
+  schemas:
+    Assignment:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        subject:
+          type: string
+        due_date:
+          type: string
+          format: date
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
