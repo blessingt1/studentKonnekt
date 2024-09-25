@@ -1,13 +1,10 @@
 openapi: 3.0.0
 info:
-  title: Student Konnekt API
+  title: Education API
   version: 1.0.0
-  description: API documentation for the Home Management System, covering user authentication, assignments, feedback, submissions, and video management.
-
+  description: API for managing assignments, submissions, feedback, and user authentication.
 servers:
-  - url: http://localhost:8000/api/v1
-    description: Local development server
-
+  - url: http://localhost:8000
 paths:
   /users/register:
     post:
@@ -21,39 +18,22 @@ paths:
               properties:
                 first_name:
                   type: string
-                  example: "John"
                 last_name:
                   type: string
-                  example: "Doe"
                 email:
                   type: string
-                  format: email
-                  example: "john.doe@example.com"
                 password:
                   type: string
-                  example: "P@ssw0rd123"
                 role:
                   type: integer
                   enum: [0, 1, 2] # ADMIN, LECTURER, STUDENT
-                  example: 2
       responses:
         '201':
           description: User created successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "User registered successfully"
-                  userId:
-                    type: string
-                    example: "64f4da5e0a34f9b0a45bf34a"
-        '400':
-          description: Invalid input
         '409':
           description: Email already exists
+        '400':
+          description: Invalid input
 
   /users/login:
     post:
@@ -67,11 +47,8 @@ paths:
               properties:
                 email:
                   type: string
-                  format: email
-                  example: "john.doe@example.com"
                 password:
                   type: string
-                  example: "P@ssw0rd123"
       responses:
         '200':
           description: Authentication successful
@@ -80,39 +57,10 @@ paths:
               schema:
                 type: object
                 properties:
-                  message:
-                    type: string
-                    example: "Login successful"
                   token:
                     type: string
-                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
         '401':
           description: Authentication failed
-
-  /users/{userId}:
-    delete:
-      summary: Delete a user
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          description: ID of the user to delete
-          schema:
-            type: string
-            example: "64f4da5e0a34f9b0a45bf34a"
-      responses:
-        '200':
-          description: User deleted
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "User deleted successfully"
-        '404':
-          description: User not found
 
   /assignments:
     get:
@@ -120,12 +68,8 @@ paths:
       responses:
         '200':
           description: A list of assignments
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Assignment'
+        '404':
+          description: No assignments found
 
     post:
       summary: Create a new assignment
@@ -138,17 +82,13 @@ paths:
               properties:
                 title:
                   type: string
-                  example: "Math Homework"
                 description:
                   type: string
-                  example: "Complete the exercises in chapter 3"
                 subject:
                   type: string
-                  example: "Mathematics"
                 due_date:
                   type: string
                   format: date
-                  example: "2024-10-05"
       responses:
         '201':
           description: Assignment created successfully
@@ -162,23 +102,22 @@ paths:
         - name: assignmentId
           in: path
           required: true
-          description: ID of the assignment to retrieve
           schema:
             type: string
-            example: "64f4df5b0a34f9b0a45bf34e"
       responses:
         '200':
-          description: Assignment details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Assignment'
+          description: Assignment found
         '404':
-          description: Assignment not found
+          description: No valid entry found for the provided ID
 
-  /feedback:
-    post:
-      summary: Create feedback for an assignment
+    put:
+      summary: Update an assignment
+      parameters:
+        - name: assignmentId
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -186,44 +125,46 @@ paths:
             schema:
               type: object
               properties:
-                assignmentId:
+                title:
                   type: string
-                  example: "64f4df5b0a34f9b0a45bf34e"
-                lecturer:
+                description:
                   type: string
-                  example: "Dr. Smith"
-                feedback:
+                subject:
                   type: string
-                  example: "Good job, but needs more detail on question 3."
-                mark:
-                  type: number
-                  example: 85
+                due_date:
+                  type: string
+                  format: date
       responses:
-        '201':
-          description: Feedback created successfully
-        '400':
-          description: Invalid input
+        '200':
+          description: Assignment updated successfully
+        '404':
+          description: No valid entry found for the provided ID
 
-  /feedback/{assignmentId}/download:
-    get:
-      summary: Download marks and feedback for a specific assignment
+    delete:
+      summary: Delete an assignment
       parameters:
         - name: assignmentId
           in: path
           required: true
-          description: ID of the assignment to download feedback for
           schema:
             type: string
-            example: "64f4df5b0a34f9b0a45bf34e"
       responses:
         '200':
-          description: Marks and feedback downloaded successfully
+          description: Assignment deleted successfully
         '404':
-          description: No feedback found for this assignment
+          description: No valid entry found for the provided ID
 
   /submissions:
+    get:
+      summary: Get all submissions
+      responses:
+        '200':
+          description: A list of submissions
+        '404':
+          description: No submissions found
+
     post:
-      summary: Submit a video for an assignment
+      summary: Submit a video
       requestBody:
         required: true
         content:
@@ -231,64 +172,135 @@ paths:
             schema:
               type: object
               properties:
-                assignmentId:
-                  type: string
-                  example: "64f4df5b0a34f9b0a45bf34e"
-                userId:
-                  type: string
-                  example: "64f4da5e0a34f9b0a45bf34a"
                 video:
                   type: string
                   format: binary
+                assignmentId:
+                  type: string
+                userId:
+                  type: string
       responses:
         '201':
           description: Video submitted successfully
         '400':
           description: Invalid input
 
-  /submissions/{submissionId}/stream:
+  /submissions/{submissionId}:
     get:
-      summary: Stream a video submission
+      summary: Get a submission by ID
       parameters:
         - name: submissionId
           in: path
           required: true
-          description: ID of the submission to stream
           schema:
             type: string
-            example: "64f4e2ac0a34f9b0a45bf350"
       responses:
         '200':
-          description: Video streaming successfully
+          description: Submission found
+        '404':
+          description: No submission found with the provided ID
+
+    delete:
+      summary: Delete a submission
+      parameters:
+        - name: submissionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Submission deleted successfully
+        '404':
+          description: No submission found with the provided ID
+
+  /feedback:
+    post:
+      summary: Provide feedback on a submission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                submissionId:
+                  type: string
+                feedback:
+                  type: string
+                marks:
+                  type: number
+                lecturerId:
+                  type: string
+      responses:
+        '200':
+          description: Feedback provided successfully
         '404':
           description: Submission not found
 
+    get:
+      summary: Get feedbacks for a specific assignment
+      parameters:
+        - name: assignmentId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of feedbacks
+        '404':
+          description: No feedback found for this assignment
+
 components:
   schemas:
+    User:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        role:
+          type: integer
     Assignment:
       type: object
       properties:
-        _id:
-          type: string
-          example: "64f4df5b0a34f9b0a45bf34e"
         title:
           type: string
-          example: "Math Homework"
         description:
           type: string
-          example: "Complete the exercises in chapter 3"
         subject:
           type: string
-          example: "Mathematics"
         due_date:
           type: string
           format: date
-          example: "2024-10-05"
-        createdAt:
+    Submission:
+      type: object
+      properties:
+        assignment:
+          type: string
+        student:
+          type: string
+        videoPath:
+          type: string
+        feedbackBy:
+          type: string
+        submittedAt:
           type: string
           format: date-time
-          example: "2024-09-21T18:25:43.511Z"
-        updatedAt:
+    Feedback:
+      type: object
+      properties:
+        videoId:
           type: string
-          format: date-time
-          example: "2024-09-23T10:12:34.511Z"
+        userId:
+          type: string
+        feedbackText:
+          type: string
+        mark:
+          type: number
