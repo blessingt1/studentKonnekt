@@ -21,16 +21,21 @@ paths:
               properties:
                 first_name:
                   type: string
+                  example: "John"
                 last_name:
                   type: string
+                  example: "Doe"
                 email:
                   type: string
                   format: email
+                  example: "john.doe@example.com"
                 password:
                   type: string
+                  example: "P@ssw0rd123"
                 role:
                   type: integer
                   enum: [0, 1, 2] # ADMIN, LECTURER, STUDENT
+                  example: 2
       responses:
         '201':
           description: User created successfully
@@ -41,8 +46,10 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: "User registered successfully"
                   userId:
                     type: string
+                    example: "64f4da5e0a34f9b0a45bf34a"
         '400':
           description: Invalid input
         '409':
@@ -61,8 +68,10 @@ paths:
                 email:
                   type: string
                   format: email
+                  example: "john.doe@example.com"
                 password:
                   type: string
+                  example: "P@ssw0rd123"
       responses:
         '200':
           description: Authentication successful
@@ -73,8 +82,10 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: "Login successful"
                   token:
                     type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
         '401':
           description: Authentication failed
 
@@ -88,9 +99,18 @@ paths:
           description: ID of the user to delete
           schema:
             type: string
+            example: "64f4da5e0a34f9b0a45bf34a"
       responses:
         '200':
           description: User deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User deleted successfully"
         '404':
           description: User not found
 
@@ -118,13 +138,17 @@ paths:
               properties:
                 title:
                   type: string
+                  example: "Math Homework"
                 description:
                   type: string
+                  example: "Complete the exercises in chapter 3"
                 subject:
                   type: string
+                  example: "Mathematics"
                 due_date:
                   type: string
                   format: date
+                  example: "2024-10-05"
       responses:
         '201':
           description: Assignment created successfully
@@ -141,6 +165,7 @@ paths:
           description: ID of the assignment to retrieve
           schema:
             type: string
+            example: "64f4df5b0a34f9b0a45bf34e"
       responses:
         '200':
           description: Assignment details
@@ -163,12 +188,16 @@ paths:
               properties:
                 assignmentId:
                   type: string
+                  example: "64f4df5b0a34f9b0a45bf34e"
                 lecturer:
                   type: string
+                  example: "Dr. Smith"
                 feedback:
                   type: string
+                  example: "Good job, but needs more detail on question 3."
                 mark:
                   type: number
+                  example: 85
       responses:
         '201':
           description: Feedback created successfully
@@ -185,6 +214,7 @@ paths:
           description: ID of the assignment to download feedback for
           schema:
             type: string
+            example: "64f4df5b0a34f9b0a45bf34e"
       responses:
         '200':
           description: Marks and feedback downloaded successfully
@@ -203,8 +233,10 @@ paths:
               properties:
                 assignmentId:
                   type: string
+                  example: "64f4df5b0a34f9b0a45bf34e"
                 userId:
                   type: string
+                  example: "64f4da5e0a34f9b0a45bf34a"
                 video:
                   type: string
                   format: binary
@@ -224,6 +256,7 @@ paths:
           description: ID of the submission to stream
           schema:
             type: string
+            example: "64f4e2ac0a34f9b0a45bf350"
       responses:
         '200':
           description: Video streaming successfully
@@ -237,18 +270,25 @@ components:
       properties:
         _id:
           type: string
+          example: "64f4df5b0a34f9b0a45bf34e"
         title:
           type: string
+          example: "Math Homework"
         description:
           type: string
+          example: "Complete the exercises in chapter 3"
         subject:
           type: string
+          example: "Mathematics"
         due_date:
           type: string
           format: date
+          example: "2024-10-05"
         createdAt:
           type: string
           format: date-time
+          example: "2024-09-21T18:25:43.511Z"
         updatedAt:
           type: string
           format: date-time
+          example: "2024-09-23T10:12:34.511Z"
