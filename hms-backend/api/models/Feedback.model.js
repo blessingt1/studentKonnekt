@@ -14,6 +14,7 @@ const feedbackSchema = new mongoose.Schema({
         required: true // userId is required
     },
     feedbackText: {type: String, required: true} // Feedback text, required
+    mark: {type: Number, required: true} // Mark field, required
 });
 
 // Exporting the Feedback model
