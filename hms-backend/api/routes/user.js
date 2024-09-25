@@ -1,12 +1,15 @@
 import express from 'express';
 import auth from '../controllers/userAuthController.js';
+import checkAuth from '../middleware/check-auth.js';
 const router = express.Router();
 
-// register
+// register (no authentication required)
 router.post('/register', auth.postUser);
-// login
+
+// login (no authentication required)
 router.post('/login', auth.postLogin);
-// delete user
-router.delete('/:userId', auth.deleteUser);
+
+// delete user (authentication required)
+router.delete('/:userId', checkAuth, auth.deleteUser);
 
 export default router;
