@@ -1,5 +1,5 @@
 import Assignment from '../models/Assignment';
-import mongoose from 'mongoose';
+import mongoose from 'mongoose';//THIS NEEDS TO BE USED OR NOT USED
 
 export default class assignmentController {
     static async getAllAssignments(req, res, next) {

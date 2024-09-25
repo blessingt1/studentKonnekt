@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose'; // Importing mongoose for MongoDB interactions
 
 const submissionSchema = new mongoose.Schema({
     assignment: { type: mongoose.Schema.Types.ObjectId, ref: 'Assignment', required: true }, // Refers to the assignment
@@ -14,4 +14,5 @@ const submissionSchema = new mongoose.Schema({
 
 const Submission = mongoose.model('Submission', submissionSchema);
 
-module.exports = Submission;
+// Exporting the Submission model
+export default Submission;
