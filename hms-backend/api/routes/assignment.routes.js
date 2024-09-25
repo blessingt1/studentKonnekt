@@ -9,4 +9,7 @@ router.get('/', assignmentController.getAllAssignments);
 // Route to get an assignment by ID
 router.get('/:assignmentId', assignmentController.getAssignmentById);
 
+// Route to create a new assignment
+router.post('/', assignmentController.createAssignment);  // POST route for creating assignments
+
 export default router;
