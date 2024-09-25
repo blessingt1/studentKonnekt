@@ -17,4 +17,7 @@ router.route("/:id")
     .put(FeedbackCtrl.apiUpdateFeedback) // Update a feedback
     .delete(FeedbackCtrl.apiDeleteFeedback); // Delete a feedback
 
+// Route to download marks and feedback for a specific assignment
+router.route("/assignment/:id/download").get(FeedbackCtrl.apiDownloadMarks);
+
 export default router; // Exporting the configured router

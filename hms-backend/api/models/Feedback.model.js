@@ -13,7 +13,8 @@ const feedbackSchema = new mongoose.Schema({
         ref: 'User', // Reference to the User model
         required: true // userId is required
     },
-    feedbackText: {type: String, required: true} // Feedback text, required
+    feedbackText: {type: String, required: true}, // Feedback text, required
+    mark: {type: Number, required: true} // Mark field, required
 });
 
 // Exporting the Feedback model
