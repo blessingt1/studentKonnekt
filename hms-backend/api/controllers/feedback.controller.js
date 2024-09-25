@@ -11,11 +11,13 @@ export default class FeedbackController {
             const assignmentId = req.body.assignmentId;
             const feedback = req.body.feedback;
             const lecturer = req.body.lecturer;
+            const mark = req.body.mark; // Add mark field
 
             const feedbackResponse = await FeedbackDAO.addFeedback(
                 assignmentId,
                 lecturer,
-                feedback
+                feedback,
+                mark // Pass mark to DAO
             );
             res.json({ status: "success" });
         } catch (ewi) {
@@ -44,11 +46,13 @@ export default class FeedbackController {
             const feedbackId = req.params.id;
             const feedback = req.body.feedback;
             const lecturer = req.body.lecturer;
+            const mark = req.body.mark; // Add mark field
 
             const feedbackResponse = await FeedbackDAO.updateFeedback(
                 feedbackId,
                 lecturer,
-                feedback
+                feedback,
+                mark // Pass mark to DAO
             );
 
             if (feedbackResponse.modifiedCount === 0) {

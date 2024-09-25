@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
-import feedback from "./api/routes/feedback.route.js";
 
 // Derive the filename and directory name from the ES module URL
 const __filename = fileURLToPath(import.meta.url);
@@ -16,8 +15,6 @@ app.use(cors());
 // Middleware to parse incoming JSON requests
 app.use(express.json());
 
-// Define routes for the feedback API
-app.use("/api/v1/feedback", feedback);
 
 // Serve the Swagger/OpenAPI specification
 app.use('/swagger', (req, res) => {

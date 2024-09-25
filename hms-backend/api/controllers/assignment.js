@@ -1,7 +1,9 @@
 import Assignment from '../models/Assignment';
-import mongoose from 'mongoose';
+import mongoose from 'mongoose';//THIS NEEDS TO BE USED OR NOT USED
 
+// Controller class for handling assignment related operations
 export default class assignmentController {
+    // Method to get all assignments
     static async getAllAssignments(req, res, next) {
         Assignment.find()
         .exec()
@@ -22,6 +24,7 @@ export default class assignmentController {
             });
         });
     }
+    // Method to get an assignment by its ID
     static async getAssignmentById(req, res, next) {
         const id = req.params.assignmentId;
         Assignment.findById(id)

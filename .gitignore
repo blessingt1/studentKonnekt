@@ -1,2 +1,2 @@
-node_modules/
-.env
+hms-backend/node_modules/
+hms-backend/docs/.env

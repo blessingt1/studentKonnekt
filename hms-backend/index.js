@@ -1,6 +1,5 @@
 import app from "./server.js";
 import mongodb from "mongodb";
-import FeedbackDAO from "./dao/feedbackDAO.js";
 import * as dotenv from "dotenv";
 
 // Load environment variables from .env file
@@ -27,9 +26,6 @@ MongoClient.connect(
 .then(async client => {
     // Log a message when successfully connected to Cluster 0
     console.log("Successfully connected to Cluster 0");
-
-    // Initialize DAO with the connected MongoDB client
-    await FeedbackDAO.injectDB(client);
 
     // Start the server and listen on the specified port
     app.listen(port, () => {
