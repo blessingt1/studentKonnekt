@@ -59,46 +59,47 @@ export default {
     // Method to handle user login
     postLogin: async (req, res, next) => {
         try {
-            // Finding a user by their email
-            const user = await User.findOne({ email: req.body.email }).exec();
-    
-            if (!user) {
-                // If no user is found, return an authentication failure response
-                return res.status(401).json({
-                    message: 'Authentication failed'
-                });
-            }
-
-            // Verifying the provided password against the stored hash
-            const validPassword = await argon2.verify(user.password, req.body.password);
-    
-            if (validPassword) {
-                // Generating a JWT token for the user
-                const token = jwt.sign({
-                    email: user.email,
-                    userId: user._id
-                }, process.env.JWT_KEY, {
-                    expiresIn: "1h"
-                });
-    
-                // Returning a success response with the token
-                return res.status(200).json({
-                    message: 'Authentication successful',
-                    token: token
-                });
-            }
-            // If the password is invalid, return an authentication failure response
-            res.status(401).json({
-                message: 'Authentication failed'
+          // Find a user by their email
+          const user = await User.findOne({ email: req.body.email }).exec();
+      
+          if (!user) {
+            return res.status(401).json({
+              message: 'Authentication failed'   
+      
             });
+          }
+      
+          // Verify the provided password against the stored hash
+          const validPassword = await argon2.verify(user.password, req.body.password);
+      
+          if (validPassword) {
+            // Generate a JWT token for the user
+            const token = jwt.sign({
+              userId: user._id
+            }, process.env.JWT_KEY, {
+              expiresIn: '1h'
+            });
+      
+            // Return a success response with the token
+            return res.status(200).json({
+              message: 'Authentication successful',
+              token: token
+            });
+          }
+      
+          // If the password is invalid, return an authentication failure response
+          res.status(401).json({
+            message: 'Authentication failed'
+          });
         } catch (err) {
-            console.log(err);
-            // Handling any errors during login
-            res.status(500).json({
-                error: err
-            });
+          console.error(err);
+          res.status(500).json({
+            error: {
+              message: err.message || 'Internal Server Error'
+            }
+          });
         }
-    },
+      },
     // Method to handle user deletion
     deleteUser: async (req, res, next) => {
         try {

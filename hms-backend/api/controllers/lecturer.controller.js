@@ -1,27 +1,55 @@
 //import Assignment from '../models/assignment.model.js';
+import mongoose from 'mongoose';
 import Submission from '../models/submission.model.js'; 
 import User from '../models/User.js';
 
-/*
+
 // Create an assignment
 export const createAssignment = async (req, res) => {
-    try {
-        const { title, description, dueDate, subject, createdBy } = req.body;
+  try {
+    const { title, description, subject, dueDate, createdBy } = req.body;
 
-        // Check if the user is a lecturer
-        const user = await User.findById(createdBy);
-        if (!user || user.role !== 'lecturer') {
-            return res.status(403).json({ error: 'Access denied. Only a lecturer can create assignments.' });
+    // Validate input data (optional but recommended)
+    if (!title || !description || !dueDate || !subject || !createdBy) {
+      return res.status(400).json({
+        message: 'Invalid input',
+        errors: {
+          title: 'Title is required',
+          description: 'Description is required',
+          dueDate: 'Due date is required',
+          subject: 'Subject is required',
+          createdBy: 'CreatedBy is required'
         }
-
-        // Create and save the assignment
-        const newAssignment = new Assignment({ title, description, dueDate, subject, createdBy });
-        await newAssignment.save();
-
-        res.status(201).json(newAssignment);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+      });
     }
+
+    // Check if the user is a lecturer
+    const user = await User.findById(createdBy);
+    if (!user || user.role !== USER_ROLES.LECTURER) {
+      return res.status(403).json({ error: 'Access denied. Only a lecturer can create assignments.' });
+    }
+
+    // Create a new assignment with the provided data, setting the role to LECTURER
+    const newAssignment = new Assignment({
+      _id: new mongoose.Types.ObjectId(),
+      title,
+      description,
+      subject,
+      dueDate,
+      createdBy: req.user._id
+    });
+
+    // Save the assignment and retrieve the generated ID
+    const savedAssignment = await newAssignment.save();
+    const assignmentId = savedAssignment._id;
+
+    res.status(201).json({
+      message: 'Assignment created successfully',
+      assignmentId
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 // View submissions for an assignment
@@ -35,7 +63,7 @@ export const viewSubmissions = async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-};*/ //removed cause it was better to have an assignment controller and route.
+};
 
 // Stream a video submission...
 export const streamVideo = async (req, res) => {

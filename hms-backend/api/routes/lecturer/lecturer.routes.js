@@ -4,7 +4,7 @@ import { createAssignment, viewSubmissions, streamVideo, provideFeedback } from 
 const router = express.Router();
 
 // Define the route for creating assignments
-router.post('/assignments', createAssignment);
+router.post('/', createAssignment);
 
 // Define the route for viewing submissions
 router.get('/assignments/:id/submissions', viewSubmissions);
