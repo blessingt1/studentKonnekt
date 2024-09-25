@@ -1,2 +1,4 @@
 hms-backend/node_modules/
 hms-backend/docs/.env
+/swagger-ui
+/swagger-ui
