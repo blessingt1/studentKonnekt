@@ -1,4 +1,4 @@
-import Assignment from '../models/Assignment';
+import Assignment from '../models/Assignment.js';
 import mongoose from 'mongoose';//THIS NEEDS TO BE USED OR NOT USED
 
 // Controller class for handling assignment related operations
