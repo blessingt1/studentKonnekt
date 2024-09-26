@@ -29,12 +29,14 @@ mongoose.connect(uri)
         console.error("MongoDB connection error:", err);
     });
 
+
+
 // Routes
 import router from './api/routes/assignment.routes.js';
 import userRouter from './api/routes/user.js';
 import submissionRouter from './api/routes/student/student.js';
 
-app.use('/api/v1/assignments', router);
+app.use('/assignments', router);
 app.use('/users', userRouter);
 app.use('/submissions', submissionRouter);
 

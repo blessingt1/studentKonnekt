@@ -4,7 +4,7 @@ import Submission from '../models/submission.model.js';
 import User from '../models/User.js';
 
 
-// Create an assignment
+/* Create an assignment
 export const createAssignment = async (req, res) => {
   try {
     const { title, description, subject, dueDate, createdBy } = req.body;
@@ -50,7 +50,7 @@ export const createAssignment = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-};
+};*/
 
 // View submissions for an assignment
 export const viewSubmissions = async (req, res) => {
