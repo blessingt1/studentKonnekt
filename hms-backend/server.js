@@ -1,54 +1,51 @@
 import express from "express";
 import cors from "cors";
-import mongoose from "mongoose"; // Corrected the import statement for mongoose
+import mongoose from "mongoose";
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
 const app = express();
 const port = 8000;
 
-// Middleware to enable Cross-Origin Resource Sharing (CORS)
+// Middleware
 app.use(cors());
-
-// Middleware to parse incoming JSON requests
 app.use(express.json());
 
-const uri = "mongodb+srv://dummy:connectSK24@cluster0.gx4dh.mongodb.net/"; // MongoDB URI
+// MongoDB connection
+const uri = "mongodb+srv://dummy:connectSK24@cluster0.gx4dh.mongodb.net/"; // Make sure to include your database name
+mongoose.connect(uri)
+    .then(() => {
+        console.log("MongoDB database connection established successfully");
+    })
+    .catch(err => {
+        console.error("MongoDB connection error:", err);
+    });
 
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-const connection = mongoose.connection;
-connection.once('open', () => {
-    console.log("MongoDB database connection established successfully");
-})
-
-// Steps to use the routes for CRUD OPERATIONS
-// Requiring the routes 
-import router from './api/routes/assignment.routes.js'; // Ensure this import is present
-
-// Telling the server to use these routes 
-app.use('/api/v1/assignments', router); // Loading everything in the assignment router for /assignment
-
-//Steps to use the routes for CRUD OPERATIONS
-//step 1: requiring the routes 
+// Routes
+import router from './api/routes/assignment.routes.js';
 import userRouter from './api/routes/user.js';
-
-//step 2: telling the server to use these routes 
-app.use('/api/v1/users', userRouter); // Corrected the path to use the user router for /users
-
 import submissionRouter from './api/routes/student/student.js';
-app.use('/api/v1/submissions', submissionRouter);
 
-// Serve the Swagger/OpenAPI specification
-app.use('/swagger', (req, res) => {
-    // Specify the path to the Swagger/OpenAPI file located in the 'docs' folder
-    res.sendFile(path.join(__dirname, 'docs', 'swagger.yaml'));
-});
+app.use('/api/v1/assignments', router);
+app.use('/users', userRouter);
+app.use('/submissions', submissionRouter);
+
+// Swagger setup
+const swaggerDocument = YAML.load(path.join(__dirname, 'docs', 'swagger.yaml'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Catch-all route for handling 404 errors (not found)
 app.use("*", (req, res) => res.status(404).json({ error: "not found" }));
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
+    console.log(`Swagger UI is available at http://localhost:${port}/api-docs`);
 });

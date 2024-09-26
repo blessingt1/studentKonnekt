@@ -75,7 +75,9 @@ export default {
           if (validPassword) {
             // Generate a JWT token for the user
             const token = jwt.sign({
-              userId: user._id
+              _id: user._id,
+              email: user.email,
+              role: user.role
             }, process.env.JWT_KEY, {
               expiresIn: '1h'
             });

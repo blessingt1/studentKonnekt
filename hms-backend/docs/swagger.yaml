@@ -1,10 +1,23 @@
 openapi: 3.0.0
 info:
-  title: Education API
+  title: Student Konnekt API
   version: 1.0.0
-  description: API for managing assignments, submissions, feedback, and user authentication.
+  description: API documentation for the Home Management System, covering user authentication, assignments, feedback, submissions, and video management.
+
 servers:
   - url: http://localhost:8000
+    description: Local development server
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - BearerAuth: []
+
 paths:
   /users/register:
     post:
@@ -18,22 +31,39 @@ paths:
               properties:
                 first_name:
                   type: string
+                  example: "John"
                 last_name:
                   type: string
+                  example: "Doe"
                 email:
                   type: string
+                  format: email
+                  example: "john.doe@example.com"
                 password:
                   type: string
+                  example: "P@ssw0rd123"
                 role:
                   type: integer
                   enum: [0, 1, 2] # ADMIN, LECTURER, STUDENT
+                  example: 2
       responses:
         '201':
           description: User created successfully
-        '409':
-          description: Email already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User registered successfully"
+                  userId:
+                    type: string
+                    example: "64f4da5e0a34f9b0a45bf34a"
         '400':
           description: Invalid input
+        '409':
+          description: Email already exists
 
   /users/login:
     post:
@@ -47,8 +77,11 @@ paths:
               properties:
                 email:
                   type: string
+                  format: email
+                  example: "john.doe@example.com"
                 password:
                   type: string
+                  example: "P@ssw0rd123"
       responses:
         '200':
           description: Authentication successful
@@ -57,22 +90,57 @@ paths:
               schema:
                 type: object
                 properties:
+                  message:
+                    type: string
+                    example: "Login successful"
                   token:
                     type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
         '401':
           description: Authentication failed
 
-  /assignments:
-    get:
-      summary: Get all assignments
+  /users/{userId}:
+    delete:
+      summary: Delete a user
+      security:
+        - BearerAuth: [] # Require authentication
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the user to delete
+          schema:
+            type: string
+            example: "64f4da5e0a34f9b0a45bf34a"
       responses:
         '200':
-          description: A list of assignments
+          description: User deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User deleted"
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Authentication failed"
         '404':
-          description: No assignments found
+          description: User not found
 
+  /assignment:
     post:
       summary: Create a new assignment
+      security:
+        - BearerAuth: [] # Require authentication
       requestBody:
         required: true
         content:
@@ -82,42 +150,66 @@ paths:
               properties:
                 title:
                   type: string
+                  example: "HMS"
                 description:
                   type: string
+                  example: "Complete the backend"
                 subject:
                   type: string
+                  example: "IT DEVS"
+                createdBy:
+                  type: string
+                  example: "62f4df5b0a34f9b0a45bf34e"
                 due_date:
                   type: string
                   format: date
+                  example: "2024-09-27"
       responses:
         '201':
           description: Assignment created successfully
         '400':
           description: Invalid input
 
-  /assignments/{assignmentId}:
     get:
-      summary: Get an assignment by ID
-      parameters:
-        - name: assignmentId
-          in: path
-          required: true
-          schema:
-            type: string
+      summary: Get all assignments
       responses:
         '200':
-          description: Assignment found
-        '404':
-          description: No valid entry found for the provided ID
+          description: A list of assignments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Assignment'
 
-    put:
-      summary: Update an assignment
+  /assignment/{assignmentId}:
+    get:
+      summary: Get an assignment by ID
+      security:
+        - BearerAuth: [] # Require authentication
       parameters:
         - name: assignmentId
           in: path
           required: true
+          description: ID of the assignment to retrieve
           schema:
             type: string
+            example: "64f4df5b0a34f9b0a45bf34e"
+      responses:
+        '200':
+          description: Assignment details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assignment'
+        '404':
+          description: Assignment not found
+
+  /feedback:
+    post:
+      summary: Create feedback for an assignment
+      security:
+        - BearerAuth: [] # Require authentication
       requestBody:
         required: true
         content:
@@ -125,23 +217,69 @@ paths:
             schema:
               type: object
               properties:
-                title:
+                assignmentId:
                   type: string
-                description:
+                  example: "64f4df5b0a34f9b0a45bf34e"
+                lecturer:
                   type: string
-                subject:
+                  example: "Dr. Smith"
+                feedback:
                   type: string
-                due_date:
-                  type: string
-                  format: date
+                  example: "Good job, but needs more detail on question 3."
+                mark:
+                  type: number
+                  example: 85
+      responses:
+        '201':
+          description: Feedback created successfully
+        '400':
+          description: Invalid input
+
+  /feedback/{assignmentId}/download:
+    get:
+      summary: Download marks and feedback for a specific assignment
+      security:
+        - BearerAuth: [] # Require authentication
+      parameters:
+        - name: assignmentId
+          in: path
+          required: true
+          description: ID of the assignment to download feedback for
+          schema:
+            type: string
+            example: "64f4df5b0a34f9b0a45bf34e"
       responses:
         '200':
-          description: Assignment updated successfully
+          description: Marks and feedback downloaded successfully
         '404':
-          description: No valid entry found for the provided ID
+          description: No feedback found for this assignment
 
-    delete:
-      summary: Delete an assignment
+  /submissions/assignments:
+    get:
+      summary: Get all assignments
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of all assignments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Assignment'
+        '403':
+          description: Access denied
+        '404':
+          description: No assignments found
+        '500':
+          description: Internal server error
+
+  /submissions/assignments/{assignmentId}:
+    get:
+      summary: Get an assignment by ID
+      security:
+        - BearerAuth: []
       parameters:
         - name: assignmentId
           in: path
@@ -150,21 +288,23 @@ paths:
             type: string
       responses:
         '200':
-          description: Assignment deleted successfully
+          description: Assignment details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assignment'
+        '403':
+          description: Access denied
         '404':
           description: No valid entry found for the provided ID
+        '500':
+          description: Internal server error
 
-  /submissions:
-    get:
-      summary: Get all submissions
-      responses:
-        '200':
-          description: A list of submissions
-        '404':
-          description: No submissions found
-
+  /submissions/selected:
     post:
-      summary: Submit a video
+      summary: Submit a selected video
+      security:
+        - BearerAuth: []
       requestBody:
         required: true
         content:
@@ -172,135 +312,208 @@ paths:
             schema:
               type: object
               properties:
-                video:
-                  type: string
-                  format: binary
                 assignmentId:
                   type: string
                 userId:
                   type: string
+                video:
+                  type: string
+                  format: binary
       responses:
         '201':
-          description: Video submitted successfully
+          description: Selected video uploaded and compressed successfully
         '400':
-          description: Invalid input
+          description: No video file uploaded
+        '403':
+          description: Access denied
+        '500':
+          description: Internal server error
 
-  /submissions/{submissionId}:
-    get:
-      summary: Get a submission by ID
-      parameters:
-        - name: submissionId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Submission found
-        '404':
-          description: No submission found with the provided ID
-
-    delete:
-      summary: Delete a submission
-      parameters:
-        - name: submissionId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Submission deleted successfully
-        '404':
-          description: No submission found with the provided ID
-
-  /feedback:
+  /submissions/recorded:
     post:
-      summary: Provide feedback on a submission
+      summary: Submit a recorded video
+      security:
+        - BearerAuth: []
       requestBody:
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
-                submissionId:
+                assignmentId:
                   type: string
-                feedback:
+                userId:
                   type: string
-                marks:
-                  type: number
-                lecturerId:
+                video:
                   type: string
+                  format: binary
+      responses:
+        '201':
+          description: Recorded video uploaded and compressed successfully
+        '400':
+          description: No video file uploaded
+        '403':
+          description: Access denied
+        '500':
+          description: Internal server error
+
+  /browse-submissions:
+    get:
+      summary: Get all submissions
+      security:
+        - BearerAuth: []
       responses:
         '200':
-          description: Feedback provided successfully
+          description: List of all submissions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Submission'
+        '403':
+          description: Access denied
         '404':
-          description: Submission not found
+          description: No submissions found
+        '500':
+          description: Internal server error
 
+  /submissions/submissions/{submissionId}:
     get:
-      summary: Get feedbacks for a specific assignment
+      summary: Get a submission by ID
+      security:
+        - BearerAuth: []
       parameters:
-        - name: assignmentId
-          in: query
+        - name: submissionId
+          in: path
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: A list of feedbacks
+          description: Submission details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Submission'
+        '403':
+          description: Access denied
         '404':
-          description: No feedback found for this assignment
+          description: No submission found with the provided ID
+        '500':
+          description: Internal server error
+
+  /submissions/feedback:
+    get:
+      summary: Get all feedback
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of all feedback
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Feedback'
+        '403':
+          description: Access denied
+        '500':
+          description: Internal server error
+
+  /submissions/{submissionId}/stream:
+    get:
+      summary: Stream a video submission
+      security:
+        - BearerAuth: [] # Require authentication
+      parameters:
+        - name: submissionId
+          in: path
+          required: true
+          description: ID of the submission to stream
+          schema:
+            type: string
+            example: "64f4e2ac0a34f9b0a45bf350"
+      responses:
+        '200':
+          description: Video streaming successfully
+        '404':
+          description: Submission not found
 
 components:
   schemas:
-    User:
-      type: object
-      properties:
-        first_name:
-          type: string
-        last_name:
-          type: string
-        email:
-          type: string
-        password:
-          type: string
-        role:
-          type: integer
     Assignment:
       type: object
       properties:
+        _id:
+          type: string
+          example: "64f4df5b0a34f9b0a45bf34e"
         title:
           type: string
+          example: "Math Homework"
         description:
           type: string
+          example: "Complete the exercises in chapter 3"
         subject:
           type: string
+          example: "Mathematics"
         due_date:
           type: string
           format: date
-    Submission:
-      type: object
-      properties:
-        assignment:
+          example: "2024-10-05"
+        createdBy:
           type: string
-        student:
-          type: string
-        videoPath:
-          type: string
-        feedbackBy:
-          type: string
-        submittedAt:
+          example: "64f4da5e0a34f9b0a45bf34a"
+        createdAt:
           type: string
           format: date-time
+          example: "2024-09-21T18:25:43.511Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-09-23T10:12:34.511Z"
+
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "64f4da5e0a34f9b0a45bf34a"
+        first_name:
+          type: string
+          example: "John"
+        last_name:
+          type: string
+          example: "Doe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        role:
+          type: integer
+          enum: [0, 1, 2]
+          example: 2
+        password:
+          type: string
+          example: "P@ssw0rd123"
+
     Feedback:
       type: object
       properties:
-        videoId:
+        _id:
           type: string
-        userId:
+          example: "64f4f2340a34f9b0a45bf355"
+        assignmentId:
           type: string
-        feedbackText:
+          example: "64f4df5b0a34f9b0a45bf34e"
+        lecturer:
           type: string
+          example: "Dr. Smith"
+        feedback:
+          type: string
+          example: "Good job, but needs more detail on question 3."
         mark:
           type: number
+          example: 85

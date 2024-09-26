@@ -3,12 +3,17 @@ import multer from 'multer';
 import path from 'path';
 import checkAuth from '../../middleware/check-auth.js';
 import studentCtrl from '../../controllers/studentController.js';
-
+import fs from 'fs';
 const router = express.Router();
+
+const uploadDir = 'uploads/';
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, 'uploads/');
+        cb(null, uploadDir);
     },
     filename: function(req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
@@ -42,13 +47,13 @@ router.get('/assignments', studentCtrl.getAllAssignments);
 router.get('/assignments/:assignmentId', studentCtrl.getAssignmentById);
 
 // Submit selected video
-router.post('/', upload.single('video'), studentCtrl.postSubmitSelectedVideo);
+router.post('/selected', upload.single('video'), studentCtrl.postSubmitSelectedVideo);
 
 // Submit recorded video
-router.post('/', upload.single('video'), studentCtrl.postSubmitRecordedVideo);
+router.post('/recorded', upload.single('video'), studentCtrl.postSubmitRecordedVideo);
 
 // Browse submissions
-router.get('/submissions', studentCtrl.getSubmissions);
+router.get('/browse-submissions', studentCtrl.getSubmissions);
 
 // Get submission by ID
 router.get('/submissions/:submissionId', studentCtrl.getSubmissionById);
