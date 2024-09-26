@@ -3,11 +3,10 @@ import mongoose from 'mongoose';
 
 // Creating a schema for the Assignment model
 const assignmentSchema = new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId, // MongoDB's default unique identifier
     title: {type: String, required: true}, // Assignment title, required
     description: {type: String, required: true}, // Assignment description, required
     subject: {type: String, required: true}, // Assignment subject, required
-    due_date: {type: Date, required: true}, // Assignment due date, required
+    due_date: {type: Date, required: false}, // Assignment due date, required
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

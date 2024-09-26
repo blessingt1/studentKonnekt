@@ -91,7 +91,7 @@ export const provideFeedback = async (req, res) => {
 
         // Ensure the lecturer exists and has the right role
         const user = await User.findById(lecturerId);
-        if (!user || user.role !== 'lecturer') {
+        if (!user || user.role !== 1) {
             return res.status(403).json({ error: 'Access denied. Only lecturers can provide feedback.' });
         }
 
