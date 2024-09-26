@@ -117,6 +117,14 @@ export default {
             });
         } catch (error) {
             console.error('Selected video submission failed:', error);
+            // Delete the uploaded file if it exists
+            if (req.file && req.file.path) {
+                try {
+                    await fs.unlink(req.file.path);
+                } catch (unlinkError) {
+                    console.error('Failed to delete uploaded file:', unlinkError);
+                }
+            }
             res.status(500).json({ error: error.message });
         }
     },
@@ -150,6 +158,14 @@ export default {
             });
         } catch (error) {
             console.error('Recorded video submission failed:', error);
+            // Delete the uploaded file if it exists
+            if (req.file && req.file.path) {
+                try {
+                    await fs.unlink(req.file.path);
+                } catch (unlinkError) {
+                    console.error('Failed to delete uploaded file:', unlinkError);
+                }
+            }
             res.status(500).json({ error: error.message });
         }
     },
@@ -222,11 +238,15 @@ async function compressVideo(filePath) {
                 '-b:a 128k'
             ])
             .output(outputPath)
-            .on('end', () => {
+            .on('end', async () => {
                 console.log(`Video compressed successfully: ${outputPath}`);
-                fs.unlink(filePath)
-                    .then(() => resolve(outputPath))
-                    .catch(reject);
+                try {
+                    await fs.unlink(filePath);
+                    resolve(outputPath);
+                } catch (error) {
+                    console.error('Failed to delete original file:', error);
+                    resolve(outputPath);
+                }
             })
             .on('error', (err) => {
                 console.error('Video compression failed:', err);
