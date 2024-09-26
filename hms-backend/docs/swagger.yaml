@@ -136,7 +136,7 @@ paths:
         '404':
           description: User not found
 
-  /assignment:
+  /assignments:
     post:
       summary: Create a new assignment
       security:
@@ -182,7 +182,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Assignment'
 
-  /assignment/{assignmentId}:
+  /assignments/{assignmentId}:
     get:
       summary: Get an assignment by ID
       security:
@@ -235,285 +235,112 @@ paths:
         '400':
           description: Invalid input
 
-  /feedback/{assignmentId}/download:
+  /feedback/assignment/{id}:
     get:
-      summary: Download marks and feedback for a specific assignment
+      summary: Get feedbacks for a specific assignment
       security:
         - BearerAuth: [] # Require authentication
       parameters:
-        - name: assignmentId
+        - name: id
           in: path
           required: true
-          description: ID of the assignment to download feedback for
-          schema:
-            type: string
-            example: "64f4df5b0a34f9b0a45bf34e"
-      responses:
-        '200':
-          description: Marks and feedback downloaded successfully
-        '404':
-          description: No feedback found for this assignment
-
-  /submissions/assignments:
-    get:
-      summary: Get all assignments
-      security:
-        - BearerAuth: []
-      responses:
-        '200':
-          description: List of all assignments
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Assignment'
-        '403':
-          description: Access denied
-        '404':
-          description: No assignments found
-        '500':
-          description: Internal server error
-
-  /submissions/assignments/{assignmentId}:
-    get:
-      summary: Get an assignment by ID
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: assignmentId
-          in: path
-          required: true
+          description: ID of the assignment
           schema:
             type: string
       responses:
         '200':
-          description: Assignment details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Assignment'
-        '403':
-          description: Access denied
-        '404':
-          description: No valid entry found for the provided ID
-        '500':
-          description: Internal server error
-
-  /submissions/selected:
-    post:
-      summary: Submit a selected video
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                assignmentId:
-                  type: string
-                userId:
-                  type: string
-                video:
-                  type: string
-                  format: binary
-      responses:
-        '201':
-          description: Selected video uploaded and compressed successfully
-        '400':
-          description: No video file uploaded
-        '403':
-          description: Access denied
-        '500':
-          description: Internal server error
-
-  /submissions/recorded:
-    post:
-      summary: Submit a recorded video
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                assignmentId:
-                  type: string
-                userId:
-                  type: string
-                video:
-                  type: string
-                  format: binary
-      responses:
-        '201':
-          description: Recorded video uploaded and compressed successfully
-        '400':
-          description: No video file uploaded
-        '403':
-          description: Access denied
-        '500':
-          description: Internal server error
-
-  /browse-submissions:
-    get:
-      summary: Get all submissions
-      security:
-        - BearerAuth: []
-      responses:
-        '200':
-          description: List of all submissions
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Submission'
-        '403':
-          description: Access denied
-        '404':
-          description: No submissions found
-        '500':
-          description: Internal server error
-
-  /submissions/submissions/{submissionId}:
-    get:
-      summary: Get a submission by ID
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: submissionId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Submission details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Submission'
-        '403':
-          description: Access denied
-        '404':
-          description: No submission found with the provided ID
-        '500':
-          description: Internal server error
-
-  /submissions/feedback:
-    get:
-      summary: Get all feedback
-      security:
-        - BearerAuth: []
-      responses:
-        '200':
-          description: List of all feedback
+          description: List of feedbacks
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Feedback'
-        '403':
-          description: Access denied
-        '500':
-          description: Internal server error
 
-  /submissions/{submissionId}/stream:
+  /feedback/{id}:
     get:
-      summary: Stream a video submission
+      summary: Get a feedback by ID
       security:
         - BearerAuth: [] # Require authentication
       parameters:
-        - name: submissionId
+        - name: id
           in: path
           required: true
-          description: ID of the submission to stream
+          description: ID of the feedback
           schema:
             type: string
-            example: "64f4e2ac0a34f9b0a45bf350"
       responses:
         '200':
-          description: Video streaming successfully
+          description: Feedback details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'
         '404':
-          description: Submission not found
+          description: Feedback not found
 
-components:
-  schemas:
-    Assignment:
-      type: object
-      properties:
-        _id:
-          type: string
-          example: "64f4df5b0a34f9b0a45bf34e"
-        title:
-          type: string
-          example: "Math Homework"
-        description:
-          type: string
-          example: "Complete the exercises in chapter 3"
-        subject:
-          type: string
-          example: "Mathematics"
-        due_date:
-          type: string
-          format: date
-          example: "2024-10-05"
-        createdBy:
-          type: string
-          example: "64f4da5e0a34f9b0a45bf34a"
-        createdAt:
-          type: string
-          format: date-time
-          example: "2024-09-21T18:25:43.511Z"
-        updatedAt:
-          type: string
-          format: date-time
-          example: "2024-09-23T10:12:34.511Z"
+    put:
+      summary: Update a feedback
+      security:
+        - BearerAuth: [] # Require authentication
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the feedback
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                feedback:
+                  type: string
+                  example: "Updated feedback"
+                mark:
+                  type: number
+                  example: 90
+      responses:
+        '200':
+          description: Feedback updated successfully
+        '404':
+          description: Feedback not found
 
-    User:
-      type: object
-      properties:
-        _id:
-          type: string
-          example: "64f4da5e0a34f9b0a45bf34a"
-        first_name:
-          type: string
-          example: "John"
-        last_name:
-          type: string
-          example: "Doe"
-        email:
-          type: string
-          format: email
-          example: "john.doe@example.com"
-        role:
-          type: integer
-          enum: [0, 1, 2]
-          example: 2
-        password:
-          type: string
-          example: "P@ssw0rd123"
+    delete:
+      summary: Delete a feedback
+      security:
+        - BearerAuth: [] # Require authentication
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the feedback
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Feedback deleted successfully
+        '404':
+          description: Feedback not found
 
-    Feedback:
-      type: object
-      properties:
-        _id:
-          type: string
-          example: "64f4f2340a34f9b0a45bf355"
-        assignmentId:
-          type: string
-          example: "64f4df5b0a34f9b0a45bf34e"
-        lecturer:
-          type: string
-          example: "Dr. Smith"
-        feedback:
-          type: string
-          example: "Good job, but needs more detail on question 3."
-        mark:
-          type: number
-          example: 85
+  /feedback/assignment/{id}/download:
+    get:
+      summary: Download marks and feedback for a specific assignment
+      security:
+        - BearerAuth: [] # Require authentication
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the assignment to download feedback for
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Marks and feedback downloaded successfully
+        '404':
+          description: No feedback found for this assignment
+
