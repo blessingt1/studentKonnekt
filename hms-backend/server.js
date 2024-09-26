@@ -32,11 +32,11 @@ mongoose.connect(uri)
 
 
 // Routes
-import router from './api/routes/assignment.routes.js';
+import assignmentRouter from './api/routes/assignment.routes.js';
 import userRouter from './api/routes/user.js';
 import submissionRouter from './api/routes/student/student.js';
 
-app.use('/assignments', router);
+app.use('/assignments', assignmentRouter);
 app.use('/users', userRouter);
 app.use('/submissions', submissionRouter);
 
