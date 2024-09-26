@@ -1,5 +1,5 @@
 // Importing necessary models and utilities
-import Feedback from '../models/Feedback.js';
+import Feedback from '../models/Feedback.model.js';
 import Assignment from '../models/Assignment.js';
 import Submission from '../models/submission.model.js';
 import { USER_ROLES } from '../models/User.js';

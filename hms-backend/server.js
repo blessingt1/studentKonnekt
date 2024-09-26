@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose"; // Corrected the import statement for mongoose
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 const port = 8000;
@@ -25,14 +28,17 @@ connection.once('open', () => {
 import router from './api/routes/assignment.routes.js'; // Ensure this import is present
 
 // Telling the server to use these routes 
-app.use('/assignment', router); // Loading everything in the assignment router for /assignment
+app.use('/api/v1/assignments', router); // Loading everything in the assignment router for /assignment
 
 //Steps to use the routes for CRUD OPERATIONS
 //step 1: requiring the routes 
 import userRouter from './api/routes/user.js';
 
 //step 2: telling the server to use these routes 
-app.use('/users', userRouter); // Corrected the path to use the user router for /users
+app.use('/api/v1/users', userRouter); // Corrected the path to use the user router for /users
+
+import submissionRouter from './api/routes/student/student.js';
+app.use('/api/v1/submissions', submissionRouter);
 
 // Serve the Swagger/OpenAPI specification
 app.use('/swagger', (req, res) => {

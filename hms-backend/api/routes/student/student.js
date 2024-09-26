@@ -42,10 +42,10 @@ router.get('/assignments', studentCtrl.getAllAssignments);
 router.get('/assignments/:assignmentId', studentCtrl.getAssignmentById);
 
 // Submit selected video
-router.post('/submit-selected', upload.single('video'), studentCtrl.postSubmitSelectedVideo);
+router.post('/', upload.single('video'), studentCtrl.postSubmitSelectedVideo);
 
 // Submit recorded video
-router.post('/submit-recorded', upload.single('video'), studentCtrl.postSubmitRecordedVideo);
+router.post('/', upload.single('video'), studentCtrl.postSubmitRecordedVideo);
 
 // Browse submissions
 router.get('/submissions', studentCtrl.getSubmissions);
