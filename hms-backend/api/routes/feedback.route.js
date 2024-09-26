@@ -9,7 +9,7 @@ const router = express.Router(); // Creating a new Express Router instance
 router.route("/assignment/:id").get(FeedbackCtrl.apiGetFeedbacks);
 
 // Route to post a new feedback
-router.route("/new").post(FeedbackCtrl.apiPostFeedback); // This route sends a POST request to /api/v1/feedback/new
+router.route("/").post(FeedbackCtrl.apiPostFeedback); // This route sends a POST request to /feedback
 
 // Routes for CRUD operations on a specific feedback
 router.route("/:id")

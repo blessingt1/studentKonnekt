@@ -35,10 +35,13 @@ mongoose.connect(uri)
 import assignmentRouter from './api/routes/assignment.routes.js';
 import userRouter from './api/routes/user.js';
 import submissionRouter from './api/routes/student/student.js';
+import feedbackRouter from './api/routes/feedback.route.js';
 
 app.use('/assignments', assignmentRouter);
 app.use('/users', userRouter);
 app.use('/submissions', submissionRouter);
+app.use('/feedback', feedbackRouter);
+
 
 // Swagger setup
 const swaggerDocument = YAML.load(path.join(__dirname, 'docs', 'swagger.yaml'));

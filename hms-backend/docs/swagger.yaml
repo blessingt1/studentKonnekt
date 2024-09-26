@@ -34,11 +34,11 @@ components:
     Feedback:
       type: object
       properties:
-        assignmentId:
+        submissionId:  # Updated to match the Feedback model
           type: string
-        lecturer:
+        userId:   # Updated to match the Feedback model
           type: string
-        feedback:
+        feedbackText:  # Updated to match the Feedback model
           type: string
         mark:
           type: number
@@ -260,13 +260,13 @@ paths:
             schema:
               type: object
               properties:
-                assignmentId:
+                submissionId:  # Updated to match the Feedback model
                   type: string
                   example: "64f4df5b0a34f9b0a45bf34e"
-                lecturer:
+                userId:  # Updated to match the Feedback model
                   type: string
-                  example: "Dr. Smith"
-                feedback:
+                  example: "66f19567ed2c02e6b0801ef0"
+                feedbackText:  # Updated to match the Feedback model
                   type: string
                   example: "Good job, but needs more detail on question 3."
                 mark:
@@ -340,7 +340,7 @@ paths:
             schema:
               type: object
               properties:
-                feedback:
+                feedbackText:  # Updated to match the Feedback model
                   type: string
                   example: "Updated feedback"
                 mark:

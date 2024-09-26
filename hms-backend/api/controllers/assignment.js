@@ -56,10 +56,9 @@ export default class assignmentController {
 
             // Check if the user is a lecturer
             const user = await User.findById(createdBy);
-            if (user.role !== 1) {
+            if (!user || user.role !== 'lecturer') {
                 return res.status(403).json({ error: 'Access denied. Only a lecturer can create assignments.' });
             }
-
 
             // Create and save the assignment
             const newAssignment = new Assignment({ title, description, dueDate, subject, createdBy });
