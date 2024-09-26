@@ -14,6 +14,49 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+  schemas:  
+    Assignment:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        subject:
+          type: string
+        createdBy:
+          type: string
+        due_date:
+          type: string
+          format: date
+    Feedback:
+      type: object
+      properties:
+        assignmentId:
+          type: string
+        lecturer:
+          type: string
+        feedback:
+          type: string
+        mark:
+          type: number
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        role:
+          type: integer
+          enum: [0, 1, 2] # ADMIN, LECTURER, STUDENT
 
 security:
   - BearerAuth: []
@@ -153,17 +196,17 @@ paths:
                   example: "HMS"
                 description:
                   type: string
-                  example: "Complete the backend"
+                  example: "Complete the frontend"
                 subject:
                   type: string
                   example: "IT DEVS"
                 createdBy:
                   type: string
-                  example: "62f4df5b0a34f9b0a45bf34e"
+                  example: "66f19567ed2c02e6b0801ef0"
                 due_date:
                   type: string
                   format: date
-                  example: "2024-09-27"
+                  example: "2024-10-16"
       responses:
         '201':
           description: Assignment created successfully
@@ -194,7 +237,7 @@ paths:
           description: ID of the assignment to retrieve
           schema:
             type: string
-            example: "64f4df5b0a34f9b0a45bf34e"
+            example: "66f4b6eae2928de285f8b969"
       responses:
         '200':
           description: Assignment details
@@ -343,4 +386,3 @@ paths:
           description: Marks and feedback downloaded successfully
         '404':
           description: No feedback found for this assignment
-
