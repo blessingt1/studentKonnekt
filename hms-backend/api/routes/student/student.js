@@ -56,7 +56,7 @@ router.post('/recorded', upload.single('video'), studentCtrl.postSubmitRecordedV
 router.get('/browse-submissions', studentCtrl.getSubmissions);
 
 // Get submission by ID
-router.get('/submissions/:submissionId', studentCtrl.getSubmissionById);
+router.get('/:submissionId', studentCtrl.getSubmissionById);
 
 // View feedback
 router.get('/feedback', studentCtrl.getFeedback);
