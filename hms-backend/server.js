@@ -29,14 +29,13 @@ mongoose.connect(uri)
         console.error("MongoDB connection error:", err);
     });
 
-// Swagger setup
-const swaggerDocument = YAML.load(path.join(__dirname, 'docs', 'swagger.yaml'));
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 
 // Routes
-import router from './api/routes/assignment.routes.js';
+import assignmentRouter from './api/routes/assignment.routes.js';
 import userRouter from './api/routes/user.js';
 import submissionRouter from './api/routes/student/student.js';
+
 import streamRouter from './api/routes/lecturer/lecturer.routes.js';
 app.use('/api/v1/assignments', router);
 app.use('/users', userRouter);
@@ -44,10 +43,24 @@ app.use('/submissions', submissionRouter);
 app.use('/', submissionRouter);
 app.use('/submissions', streamRouter);
 
+import feedbackRouter from './api/routes/feedback.route.js';
+
+app.use('/assignments', assignmentRouter);
+app.use('/users', userRouter);
+app.use('/submissions', submissionRouter);
+app.use('/feedback', feedbackRouter);
+
+
+// Swagger setup
+const swaggerDocument = YAML.load(path.join(__dirname, 'docs', 'swagger.yaml'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+
 // Catch-all route for handling 404 errors (not found)
 app.use("*", (req, res) => res.status(404).json({ error: "not found" }));
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
-    console.log(`Swagger UI is available at http://localhost:${port}/api-docs`);
-});
+});//push
+
+
