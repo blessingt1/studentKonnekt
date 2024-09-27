@@ -2,10 +2,9 @@ import mongoose from 'mongoose'; // Importing mongoose for MongoDB interactions
 
 // Defining the schema for the Feedback model
 const feedbackSchema = new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId, // MongoDB's default unique identifier
     videoId: {
         type: mongoose.Schema.Types.ObjectId, // Type of videoId is ObjectId
-        ref: 'Video', // Reference to the Video model
+        ref: 'submission.model', // Reference to the Video model
         required: true // videoId is required
     },
     userId: {
