@@ -404,3 +404,4 @@ paths:
         '200':
           description: Marks and feedback downloaded successfully
         '404':
+          description: No feedback found for this assignment
