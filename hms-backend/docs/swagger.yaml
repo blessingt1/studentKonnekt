@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Student Konnekt API
   version: 1.0.0
-  description: API documentation for the Home Management System, covering user authentication, assignments, feedback, submissions, and video management.
+  description: API documentation for the Human Movement Science Management System Backend Api, covering user authentication, assignments, feedback, submissions, and video management.
 
 servers:
   - url: http://localhost:8000
