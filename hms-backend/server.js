@@ -20,7 +20,7 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB connection
-const uri = "mongodb+srv://dummy:connectSK24@cluster0.gx4dh.mongodb.net/"; // Make sure to include your database name
+const uri = "mongodb+srv://dummy:connectSK24@cluster0.gx4dh.mongodb.net/"; 
 mongoose.connect(uri)
     .then(() => {
         console.log("MongoDB database connection established successfully");
@@ -29,18 +29,20 @@ mongoose.connect(uri)
         console.error("MongoDB connection error:", err);
     });
 
+// Swagger setup
+const swaggerDocument = YAML.load(path.join(__dirname, 'docs', 'swagger.yaml'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 // Routes
 import router from './api/routes/assignment.routes.js';
 import userRouter from './api/routes/user.js';
 import submissionRouter from './api/routes/student/student.js';
-
+import streamRouter from './api/routes/lecturer/lecturer.routes.js';
 app.use('/api/v1/assignments', router);
 app.use('/users', userRouter);
 app.use('/submissions', submissionRouter);
-
-// Swagger setup
-const swaggerDocument = YAML.load(path.join(__dirname, 'docs', 'swagger.yaml'));
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/', submissionRouter);
+app.use('/submissions', streamRouter);
 
 // Catch-all route for handling 404 errors (not found)
 app.use("*", (req, res) => res.status(404).json({ error: "not found" }));

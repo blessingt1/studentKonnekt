@@ -2,7 +2,8 @@
 import mongoose from 'mongoose';
 import Submission from '../models/submission.model.js'; 
 import User from '../models/User.js';
-
+import path from 'path';
+import fs from 'fs';
 
 // Create an assignment
 export const createAssignment = async (req, res) => {
@@ -67,21 +68,31 @@ export const viewSubmissions = async (req, res) => {
 
 // Stream a video submission...
 export const streamVideo = async (req, res) => {
-    try {
-        const { submissionId } = req.params;
+  try {
+      const { submissionId } = req.params;
 
-        // Retrieve the submission
-        const submission = await Submission.findById(submissionId);
-        if (!submission) {
-            return res.status(404).json({ error: 'Submission not found.' });
-        }
+      // Retrieve the submission
+      const submission = await Submission.findById(submissionId);
+      if (!submission) {
+          return res.status(404).json({ error: 'Submission not found.' });
+      }
 
-        // Assuming the video is stored as a file path in the submission document
-        const videoPath = submission.videoPath;
-        res.sendFile(videoPath); // Stream the video
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+      // Assuming the video is stored as a relative file path in the submission document
+      const videoPath = submission.videoPath;
+
+      // Construct the absolute path
+      const absolutePath = path.resolve(process.cwd(), videoPath);
+
+      // Check if the file exists
+      if (!fs.existsSync(absolutePath)) {
+          return res.status(404).json({ error: 'Video file not found.' });
+      }
+
+      // Stream the video
+      res.sendFile(absolutePath);
+  } catch (err) {
+      res.status(500).json({ error: err.message });
+  }
 };
 
 // Provide feedback on a submission
