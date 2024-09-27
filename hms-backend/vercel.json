@@ -8,8 +8,12 @@
     ],
     "routes": [
       {
-        "src": "/(.*)",
+        "src": "/((?!/static).)*",
         "dest": "server.js" 
+      },
+      {
+        "src": "/static/(.*)",
+        "dest": "static/$1"
       }
     ]
 }
