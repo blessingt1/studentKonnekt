@@ -5,11 +5,15 @@ import FeedbackCtrl from "../controllers/feedback.controller.js"; // Importing F
 
 const router = express.Router(); // Creating a new Express Router instance
 
-// Route to get feedbacks for a specific assignment
-router.route("/assignment/:id").get(FeedbackCtrl.apiGetFeedbacks);
 
-// Route to post a new feedback
+// Route to get all feedback
+router.route("/").get(FeedbackCtrl.apiGetFeedbacks);
 router.route("/").post(FeedbackCtrl.apiPostFeedback); // This route sends a POST request to /feedback
+
+
+// Route to get feedbacks for a specific assignment
+router.route("/assignment/:assignmentId").get(FeedbackCtrl.apiGetFeedbackForAssignment);
+
 
 // Routes for CRUD operations on a specific feedback
 router.route("/:id")
@@ -18,6 +22,9 @@ router.route("/:id")
     .delete(FeedbackCtrl.apiDeleteFeedback); // Delete a feedback
 
 // Route to download marks and feedback for a specific assignment
-router.route("/assignment/:id/download").get(FeedbackCtrl.apiDownloadMarks);
+router.route("/assignment/:assignmentId/download").get(FeedbackCtrl.apiDownloadMarks);
+
+// Route to get all feedback on all user submissions
+router.route("/feedback/users/:userId").get(FeedbackCtrl.getAllFeedbackOnAllUserSubmissions); // Added route for getting all feedback for a user
 
 export default router; // Exporting the configured router

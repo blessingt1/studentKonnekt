@@ -59,6 +59,26 @@ export default class FeedbackController {
         }
     }
 
+
+    // Get feedback by assignment ID
+    static async apiGetFeedbackForAssignment(req, res, next) {
+        try {
+            const assignmentId = req.params.id; // Get assignment ID from request parameters
+            // Use Feedback model to find feedbacks for the assignment
+            // This line of code uses the Feedback model to find all feedback documents in the database where the 'submissionId' field matches the 'assignmentId' provided in the request parameters. The result is stored in the 'feedbacks' variable.
+            const feedbacks = await Feedback.find({ submissionId: assignmentId });
+            if (feedbacks.length === 0) {
+                return res.status(404).json({ error: "No feedback found for this assignment." });
+            }
+            res.json(feedbacks);
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }       
+
+
+
+
     // Update feedback
     static async apiUpdateFeedback(req, res, next) {
         try {
@@ -135,6 +155,21 @@ export default class FeedbackController {
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: "Failed to download marks and feedback." });
+        }
+    }
+
+    // Get all feedback on all user submissions
+    static async getAllFeedbackOnAllUserSubmissions(req, res, next) {
+        try {
+            const userId = req.params.userId; // Get user ID from request parameters
+            // Use Feedback model to find all feedbacks for the user's submissions
+            const feedbacks = await Feedback.find({ userId }); 
+            if (feedbacks.length === 0) {
+                return res.status(404).json({ error: "No feedback found for this user's submissions." });
+            }
+            res.json(feedbacks);
+        } catch (e) {
+            res.status(500).json({ error: e.message });
         }
     }
 }
