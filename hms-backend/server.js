@@ -8,7 +8,7 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const _dirname = path.dirname(_filename);
 
 dotenv.config();
 
@@ -29,12 +29,14 @@ mongoose.connect(uri)
         console.error("MongoDB connection error:", err);
     });
 
+
+
 // Routes
 import router from './api/routes/assignment.routes.js';
 import userRouter from './api/routes/user.js';
 import submissionRouter from './api/routes/student/student.js';
 
-app.use('/api/v1/assignments', router);
+app.use('/assignments', router);
 app.use('/users', userRouter);
 app.use('/submissions', submissionRouter);
 
@@ -46,6 +48,5 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("*", (req, res) => res.status(404).json({ error: "not found" }));
 
 app.listen(port, () => {
-    console.log(`Server is running on port: ${port}`);
-    console.log(`Swagger UI is available at http://localhost:${port}/api-docs`);
-});
+    console.log(Server is running on port: ${port});
+});//push
