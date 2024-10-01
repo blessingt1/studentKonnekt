@@ -30,7 +30,7 @@ export default {
         } catch (err) {
             console.error(err);
             res.status(500).json({
-                error: 'Internal server error'
+                error: 'getFeedback Internal server error'
             });
         }
     },
@@ -56,7 +56,7 @@ export default {
         } catch (err) {
             console.error(err);
             res.status(500).json({
-                error: 'Internal server error'
+                error: 'getAllAssignments Internal server error'
             });
         }
     },
@@ -83,7 +83,7 @@ export default {
         } catch (err) {
             console.error(err);
             res.status(500).json({
-                error: 'Internal server error'
+                error: 'getAssignmentById Internal server error'
             });
         }
     },
@@ -191,7 +191,7 @@ export default {
         } catch (err) {
             console.error(err);
             res.status(500).json({
-                error: 'Internal server error'
+                error: 'getSubmissions Internal server error'
             });
         }
     },
@@ -218,7 +218,7 @@ export default {
         } catch (err) {
             console.error(err);
             res.status(500).json({
-                error: 'Internal server error'
+                error: 'getSubmissionById Internal server error'
             });
         }
     }

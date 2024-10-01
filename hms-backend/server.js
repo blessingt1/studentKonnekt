@@ -8,7 +8,7 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 
 const __filename = fileURLToPath(import.meta.url);
-const _dirname = path.dirname(_filename);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -32,13 +32,16 @@ mongoose.connect(uri)
 
 
 // Routes
-import router from './api/routes/assignment.routes.js';
+import assignmentRouter from './api/routes/assignment.routes.js';
 import userRouter from './api/routes/user.js';
 import submissionRouter from './api/routes/student/student.js';
+import feedbackRouter from './api/routes/feedback.route.js';
 
-app.use('/assignments', router);
+app.use('/assignments', assignmentRouter);
 app.use('/users', userRouter);
 app.use('/submissions', submissionRouter);
+app.use('/feedback', feedbackRouter);
+
 
 // Swagger setup
 const swaggerDocument = YAML.load(path.join(__dirname, 'docs', 'swagger.yaml'));
@@ -48,5 +51,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("*", (req, res) => res.status(404).json({ error: "not found" }));
 
 app.listen(port, () => {
-    console.log(Server is running on port: ${port});
+    console.log(`Server is running on port: ${port}`);
 });//push
+
+

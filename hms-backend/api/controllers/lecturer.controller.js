@@ -4,54 +4,6 @@ import Submission from '../models/submission.model.js';
 import User from '../models/User.js';
 
 
-// Create an assignment
-export const createAssignment = async (req, res) => {
-  try {
-    const { title, description, subject, dueDate, createdBy } = req.body;
-
-    // Validate input data (optional but recommended)
-    if (!title || !description || !dueDate || !subject || !createdBy) {
-      return res.status(400).json({
-        message: 'Invalid input',
-        errors: {
-          title: 'Title is required',
-          description: 'Description is required',
-          dueDate: 'Due date is required',
-          subject: 'Subject is required',
-          createdBy: 'CreatedBy is required'
-        }
-      });
-    }
-
-    // Check if the user is a lecturer
-    const user = await User.findById(createdBy);
-    if (!user || user.role !== USER_ROLES.LECTURER) {
-      return res.status(403).json({ error: 'Access denied. Only a lecturer can create assignments.' });
-    }
-
-    // Create a new assignment with the provided data, setting the role to LECTURER
-    const newAssignment = new Assignment({
-      _id: new mongoose.Types.ObjectId(),
-      title,
-      description,
-      subject,
-      dueDate,
-      createdBy: req.user._id
-    });
-
-    // Save the assignment and retrieve the generated ID
-    const savedAssignment = await newAssignment.save();
-    const assignmentId = savedAssignment._id;
-
-    res.status(201).json({
-      message: 'Assignment created successfully',
-      assignmentId
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
 // View submissions for an assignment
 export const viewSubmissions = async (req, res) => {
     try {
@@ -91,7 +43,7 @@ export const provideFeedback = async (req, res) => {
 
         // Ensure the lecturer exists and has the right role
         const user = await User.findById(lecturerId);
-        if (!user || user.role !== 'lecturer') {
+        if (!user || user.role !== 1) {
             return res.status(403).json({ error: 'Access denied. Only lecturers can provide feedback.' });
         }
 
