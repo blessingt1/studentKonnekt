@@ -1,42 +1,110 @@
-# studentKonnekt
-HMS CAPSTONE
-For the front end, enter the following command to run the development server: 
+# HMS Backend API
 
-npm run dev
+Student Konnekt Human MoveMent Science Management System Backend API is a Node.js application designed for managing user authentication, assignments, feedback, and submissions in a Human Movement Science Management System.
 
+## Table of Contents
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Endpoints](#api-endpoints)
+- [Contributing](#contributing)
+- [License](#license)
 
+## Installation
 
-For the back end, enter the following command to run the development server: 
-- node index.js
-or 
-- npm run dev or 
-- node run start
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/blessingt1/studentKonnekt.git
+   cd hms-backend
+   ```
 
+2. **Install dependencies:**
+   Make sure you have [Node.js](https://nodejs.org/) installed. Then run:
+   ```bash
+   npm install
+   ```
 
+3. **Set up environment variables:**
+   Create a `.env` file in the root directory and add the following:
+   ```
+   JWT_KEY=secret
+   SWAGGER_URL=http://localhost:8000/api-docs
+   ```
 
-Front end guide: 
+4. **Run the application:**
+   Use the following command to start the server:
+   ```bash
+   cd hms-backend
+   npm start
+   ```
 
-Login/Signup:
-1. main.jsx
-Comments: This file initializes the React app and mounts the App component to the root element in your HTML.
-Recommendation: The use of React.StrictMode is great as it helps identify potential problems in your app during development. No changes needed here.
+   The server will run on `http://localhost:8000`.
 
-2. App.jsx
-Comments: This component is responsible for routing between different pages like Login, Signup, and Home. The routes are correctly set up, ensuring proper navigation.
-Recommendation: If you want to add additional protection, consider adding route guards to protect routes like /home that should only be accessible to authenticated users.
+## Usage
 
-3. Home.jsx
-Comments: A simple component that displays a message. It works as intended.
-Recommendation: You might want to make this component more dynamic by passing props or using state to display user-specific information.
+### Authentication
+- **Register a new user:**
+  - **Endpoint:** `POST /users/register`
+  - **Request Body:**
+    ```json
+    {
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "john.doe@example.com",
+      "password": "P@ssw0rd123",
+      "role": 2 // 0: ADMIN, 1: LECTURER, 2: STUDENT
+    }
+    ```
 
-4. Login.jsx
-Comments: This is where the user inputs their login details. The form is well-structured and uses useState to handle input changes. The login details are sent to the backend using Axios.
-Insight:
-State Handling: Ensure that the email and password are being validated before submission. For instance, you could add checks to ensure that the email is in a valid format and the password meets security criteria (e.g., length, complexity).
-Local Storage: If you plan to store any authentication tokens or user details locally, consider using localStorage or sessionStorage. This can be useful for maintaining user sessions.
-Security: Never store sensitive information like passwords in local storage. Only store tokens or other non-sensitive data.
+- **User login:**
+  - **Endpoint:** `POST /users/login`
+  - **Request Body:**
+    ```json
+    {
+      "email": "john.doe@example.com",
+      "password": "P@ssw0rd123"
+    }
+    ```
 
-5. Storing User Details
-Axios POST Request: You're already sending the user details to the backend with an Axios POST request. Ensure that your backend is properly handling this request by checking for the correct user and responding with a token or appropriate message.
-Storing Data: Once you receive a response, if the login is successful, you could store a session token in localStorage and use it for subsequent API requests to authenticate the user.
+### Assignments
+- **Get all assignments:**
+  - **Endpoint:** `GET /assignments`
 
+- **Create a new assignment:**
+  - **Endpoint:** `POST /assignments`
+  - **Request Body:**
+    ```json
+    {
+      "title": "HMS",
+      "description": "Complete the frontend",
+      "subject": "IT DEVS",
+      "createdBy": "userId",
+      "due_date": "2024-10-16"
+    }
+    ```
+
+### Feedback
+- **Create feedback for an assignment:**
+  - **Endpoint:** `POST /feedback`
+  - **Request Body:**
+    ```json
+    {
+      "submissionId": "submissionId",
+      "userId": "userId",
+      "feedbackText": "Good job!",
+      "mark": 85
+    }
+    ```
+
+### Submissions
+- **Submit a selected video:**
+  - **Endpoint:** `POST /submissions/selected`
+  - **Request Body:** (multipart/form-data)
+    - `assignmentId`: string
+    - `userId`: string
+    - `video`: file
+
+## API Endpoints
+Refer to the [Swagger documentation](http://localhost:8000/api-docs) for detailed API endpoints and their specifications.
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update tests as appropriate.
