@@ -1,4 +1,4 @@
-// guys this is an optional script to handle when an assignment row is clicked
+// guys this is just an optional script to handle when an assignment row is clicked
 document.addEventListener('DOMContentLoaded', function() {
     const assignmentRows = document.querySelectorAll('tbody tr');
 
