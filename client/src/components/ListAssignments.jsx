@@ -18,13 +18,13 @@ function SubmittedAssignmentsList() {
                 const token = localStorage.getItem('token');
                 const userRole = localStorage.getItem('role');
 
-                // Restrict access based on user role, only allowing lecturers (0) and admins (1)
+                // Restrict access based on user role, only allowing lecturers (1) and admins (0)
                 if (userRole !== '0' && userRole !== '1') {
                     throw new Error('Access denied. Only lecturers and admins can view submissions.');
                 }
 
                 // API call to fetch the submissions data, including the Authorization token
-                const response = await axios.get('http://localhost:8000/lecturer/submissions', {
+                const response = await axios.get('http://localhost:8000/users/submissions', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 
