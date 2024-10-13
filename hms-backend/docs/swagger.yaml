@@ -550,3 +550,46 @@ paths:
           description: Video streaming successfully
         '404':
           description: Submission not found
+
+  /assignments/{assignmentId}/submissions:
+    get:
+      summary: Get all submissions for a specific assignment
+      security:
+        - BearerAuth: [] # Require authentication
+      parameters:
+        - name: assignmentId
+          in: path
+          required: true
+          description: ID of the assignment to retrieve submissions for
+          schema:
+            type: string
+            example: "66f4b6eae2928de285f8b969"
+      responses:
+        '200':
+          description: A list of submissions for the assignment
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Submission'
+        '404':
+          description: No submissions found for the assignment
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No submissions found for this assignment."
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
