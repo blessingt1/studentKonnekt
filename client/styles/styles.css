@@ -244,3 +244,83 @@ body {
 
 
 
+
+
+  .login-container {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-control {
+    height: 45px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.btn {
+    height: 45px;
+    font-size: 16px;
+}
+
+body {
+    background-color: #ffffff;
+}
+
+h2 {
+    font-weight: 700;
+    color: #333;
+}
+
+p {
+    font-size: 14px;
+    color: #777;
+}
+
+input::placeholder {
+    color: #aaa;
+    font-size: 14px;
+}
+
+html{
+    background-color: white;
+}
+
+/* General styles for forms */
+.container-fluid {
+    background-color: #f8f9fa; /* Light background for better contrast */
+}
+
+.bg-white {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+h2 {
+    color: #007bff; /* Primary color for headings */
+    margin-bottom: 20px; /* Spacing below headings */
+}
+
+.form-control {
+    border-radius: 0.25rem; /* Rounded corners for inputs */
+    border: 1px solid #ced4da; /* Light border */
+}
+
+.btn-success {
+    color: #5e489d; /* Updated to new purple */
+    border: none; /* Remove border */
+}
+
+.btn-default {
+    background-color: #e9ecef; /* Light button */
+    color: #495057; /* Dark text */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .w-25 {
+        width: 90%; /* Full width on smaller screens */
+    }
+}
+

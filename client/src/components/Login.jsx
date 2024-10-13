@@ -2,7 +2,7 @@ import React, { useState } from "react"; // Importing React and useState hook fo
 import { Link } from "react-router-dom"; // Importing Link for navigation
 import axios from 'axios'; // Importing axios for making HTTP requests
 import { useNavigate } from "react-router-dom"; // Importing useNavigate hook for navigation
-import '../../styles/lg.css'; // Importing custom CSS file
+import '../../styles/styles.css'; // Importing custom CSS file
 import '../../styles/animations.css'; // Importing custom CSS for animations
 
 function Login() {    
