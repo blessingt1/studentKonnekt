@@ -4,9 +4,9 @@ import { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
 
-import Signup from './Signup'
-import Login from './Login'
-import Home from './Home'
+import Signup from './Signup'; 
+import Login from './Login'; 
+import Home from './Home'; 
 
 function App() {
   return (
@@ -18,7 +18,6 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
-
     </BrowserRouter>
   )
 }
