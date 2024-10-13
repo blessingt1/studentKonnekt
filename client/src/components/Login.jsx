@@ -20,20 +20,23 @@ function Login() {
         }
 
         axios.post("http://localhost:8000/users/login", { email, password }) // Making a POST request to the login endpoint
-            .then(result => {
-                if (result.data.token) {
-                    localStorage.setItem('token', result.data.token); // Store the token
-                    // Optionally store the role if needed
-                    localStorage.setItem('role', result.data.role); // Store the role if needed
-                    navigate("/home"); // Navigating to the home page after successful login
-                } else {
-                    alert(result.data.message || "Login failed"); // Alerting the user if login fails
-                }
-            })
-            .catch(err => {
-                console.error(err); // Logging the error to the console
-                alert("An error occurred during login. Please try again."); // Alerting the user of an error
-            });
+        .then(result => {
+            if (result.data.token) {
+                const now = new Date().getTime();  // Get the current time
+                localStorage.setItem('token', result.data.token); // Store the token
+                localStorage.setItem('role', result.data.role); // Store the role
+                localStorage.setItem('loginTime', now); // Store the login time
+                localStorage.setItem('expiryTime', now + (60 * 60 * 1000)); // Set expiry time for 1 hour (in milliseconds)
+            
+                navigate("/home"); // Navigate to home after successful login
+            } else {
+                alert(result.data.message || "Login failed"); // Alerting the user if login fails
+            }
+        })
+        .catch(err => {
+            console.error(err); // Logging the error to the console
+            alert("An error occurred during login. Please try again."); // Alerting the user of an error
+        });
     };
 
     const toggleAdmin = () => setIsAdminOpen(!isAdminOpen); // Function to toggle the admin panel

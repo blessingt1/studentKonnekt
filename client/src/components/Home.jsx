@@ -57,10 +57,11 @@ const Home = () => {
               <div className="nav-item dropdown">
                 <a href="#" className="nav-link dropdown-toggle" onClick={toggleAdmin}>Admin</a>
                 <div className={`dropdown-menu m-0 ${isAdminOpen ? 'show' : ''}`}> {/* Collapse class */}
-                  <Link to="/admin/list" className="dropdown-item">List</Link>
-                  <Link to="/admin/create" className="dropdown-item">Create</Link>
-                  <Link to="/admin/update" className="dropdown-item">Update</Link>
-                  <Link to="/admin/delete" className="dropdown-item">Delete</Link>
+                  <Link to="/assignments/list" className="dropdown-item">List</Link>
+                  <Link to="/assignments/create" className="dropdown-item">Create</Link>
+                  <Link to="/assignments/update" className="dropdown-item">Update</Link>
+                  <Link to="/assignments/delete" className="dropdown-item">Delete</Link>
+                  <Link to="/assignments/submissions" className="dropdown-item">Submissions</Link>
                 </div>
               </div>
               <div className="nav-item dropdown">
@@ -70,6 +71,7 @@ const Home = () => {
                   <Link to="/assignments/create" className="dropdown-item">Create</Link>
                   <Link to="/assignments/update" className="dropdown-item">Update</Link>
                   <Link to="/assignments/delete" className="dropdown-item">Delete</Link>
+                  <Link to="/assignments/:assignmentId/submissions" className="dropdown-item">Submissions</Link>
                 </div>
               </div>
               <a href="#about" className="nav-item nav-link">About</a>

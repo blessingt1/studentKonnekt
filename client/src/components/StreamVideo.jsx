@@ -25,8 +25,8 @@ function VideoSubmissionFeedback() {
                 const token = localStorage.getItem('token');
                 const userRole = localStorage.getItem('role');
 
-                // Access control: only lecturers (role '0') and admins (role '1') can view submissions
-                if (userRole !== '0' && userRole !== '1') {
+                // Access control: only lecturers (role '1') and admins (role '1') can view submissions
+                if (userRole !== '0' || userRole !== '1') {
                     throw new Error('Access denied. Only lecturers and admins can view submissions.');
                 }
 
@@ -63,7 +63,7 @@ function VideoSubmissionFeedback() {
             const userId = localStorage.getItem('userId');
 
             // Access control: only lecturers and admins can submit feedback
-            if (userRole !== '0' && userRole !== '1') {
+            if (userRole !== '0' || userRole !== '1') {
                 throw new Error('Access denied. Only lecturers and admins can provide feedback.');
             }
 
@@ -105,7 +105,7 @@ function VideoSubmissionFeedback() {
                     {/* Video player to stream the submitted video */}
                     <div className="video-player">
                         <video controls width="100%">
-                            <source src={`http://localhost:8000/lecturer/stream/${submissionId}`} type="video/mp4" />
+                            <source src={`http://localhost:8000/submissions/stream/${submissionId}`} type="video/mp4" />
                             Your browser does not support the video tag.
                         </video>
                     </div>
