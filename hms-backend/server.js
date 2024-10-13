@@ -37,12 +37,14 @@ import submittedVideos from './api/routes/lecturer/lecturer.routes.js';
 import userRouter from './api/routes/user.js';
 import submissionRouter from './api/routes/student/student.js';
 import feedbackRouter from './api/routes/feedback.route.js';
+import streamRouter from './api/routes/lecturer/lecturer.routes.js';
 
 app.use('/assignments', assignmentRouter);
 app.use('/users', userRouter);
 app.use('/submissions', submissionRouter);
 app.use('/feedback', feedbackRouter);
 app.use('/', submittedVideos);
+app.use('/', streamRouter);
 
 
 // Swagger setup
