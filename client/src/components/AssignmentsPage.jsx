@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import '../../styles/Assignment.css'; // Updated path for the CSS file
+import '../../styles/styles.css'; // Updated path for the CSS file
 import { useNavigate } from "react-router-dom";
 
 function AssignmentsPage() {
@@ -18,7 +18,7 @@ function AssignmentsPage() {
         }
 
         // Fetch assignments with authentication
-        axios.get("http://localhost:8000/lecturer/assignments", {
+        axios.get("http://localhost:8000/assignments", {
             headers: {
                 Authorization: `Bearer ${token}` // Attach token in request header
             }

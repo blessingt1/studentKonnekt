@@ -64,14 +64,15 @@ const Home = () => {
                 </div>
               </div>
               <div className="nav-item dropdown">
-                <a href="#" className="nav-link dropdown-toggle" onClick={toggleAssignments}>Assignments</a>
-                <div className={`dropdown-menu m-0 ${isAssignmentsOpen ? 'show' : ''}`}> {/* Collapse class */}
-                  <Link to="/assignments/list" className="dropdown-item">List</Link>
-                  <Link to="/assignments/create" className="dropdown-item">Create</Link>
-                  <Link to="/assignments/update" className="dropdown-item">Update</Link>
-                  <Link to="/assignments/delete" className="dropdown-item">Delete</Link>
+                  <a href="#" className="nav-link dropdown-toggle" onClick={toggleAssignments}>Assignments</a>
+                  <div className={`dropdown-menu m-0 ${isAssignmentsOpen ? 'show' : ''}`}> {/* Collapse class */}
+                    <Link to="/assignments" className="dropdown-item">View Assignments</Link> {/* Link to the AssignmentsPage */}
+                    <Link to="/assignments/create" className="dropdown-item">Create</Link>
+                    <Link to="/assignments/update" className="dropdown-item">Update</Link>
+                    <Link to="/assignments/delete" className="dropdown-item">Delete</Link>
+                  </div>
                 </div>
-              </div>
+
               <a href="#about" className="nav-item nav-link">About</a>
             </div>
             <Link to="/login" className="btn btn-primary py-2 px-4 d-none d-lg-block">Log in</Link>
