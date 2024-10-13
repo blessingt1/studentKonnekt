@@ -23,17 +23,12 @@ function Login() {
         axios.post("http://localhost:8000/users/login", { email, password }) // Making a POST request to the login endpoint
             .then(result => {
                 if (result.data.token) {
-                    localStorage.setItem('token', result.data.token); // Store the token
-                    // Optionally store the role if needed
-                    localStorage.setItem('role', result.data.role); // Store the role if needed
-                    navigate("/home"); // Navigating to the home page after successful login
+                    localStorage.setItem('token', result.data.token); // Store token
+                    alert('Login successful!'); // Alerting the user of successful login
+                    navigate('/'); // Redirect to home after login
                 } else {
-                    alert(result.data.message || "Login failed"); // Alerting the user if login fails
+                    alert(result.data.message || 'Login failed'); // Alerting the user if login fails
                 }
-            })
-            .catch(err => {
-                console.error(err); // Logging the error to the console
-                alert("An error occurred during login. Please try again."); // Alerting the user of an error
             });
     };
 

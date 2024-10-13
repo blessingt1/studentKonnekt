@@ -1,11 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // Added useEffect for tracking login state
 import { Link, useNavigate } from 'react-router-dom'; // Correct imports
 import '../../styles/styles.css'; // Importing the CSS file
 
 const Home = () => {
   const [isAssignmentsOpen, setAssignmentsOpen] = useState(false); // State for Assignments dropdown
   const [isAdminOpen, setAdminOpen] = useState(false); // State for Admin dropdown
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token')); // Track login state
   const navigate = useNavigate(); // Using useNavigate hook for navigation
+
+  // Monitor changes to the token in localStorage
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token); // Update login state based on token presence
+  }, []); // Only run once when the component is mounted
+
+  // Handle logout
+  const handleLogout = () => {
+      localStorage.removeItem('token'); // Clear the token
+      alert("You have successfully logged out."); // Notify user
+      setIsLoggedIn(false); // Update login state
+      navigate("/"); // Redirect to home page
+  };
 
   const toggleAssignments = () => {
     setAssignmentsOpen(!isAssignmentsOpen);
@@ -56,14 +71,18 @@ const Home = () => {
             <div className="navbar-nav mx-auto py-0">
               <Link to="/" className="nav-item nav-link active">Home</Link>
               <div>
-                <Link to="/" className="nav-item nav-link">Admin</Link> {/* @Mohau enter admin page route */}
+                <Link to="/admin" className="nav-item nav-link">Admin</Link> {/* @Mohau enter admin page route */}
               </div>
               <div>
                 <Link to="/" className="nav-item nav-link">Assignments</Link>  {/* @Kanayochi enter assignment page route */}  
               </div>
               <a href="#about" className="nav-item nav-link">About</a>
             </div>
-            <Link to="/login" className="btn btn-primary py-2 px-4 d-none d-lg-block">Log in</Link>
+            {isLoggedIn ? ( // Conditional rendering for login/logout
+              <button onClick={handleLogout} className="btn btn-primary py-2 px-4 d-none d-lg-block">Logout</button>
+            ) : (
+              <Link to="/login" className="btn btn-primary py-2 px-4 d-none d-lg-block">Log in</Link>
+            )}
           </div>
         </nav>
       </div>
