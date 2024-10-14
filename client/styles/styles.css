@@ -271,7 +271,8 @@ body {
 
 h2 {
     font-weight: 700;
-    color: #333;
+    color: #5e489d; /* Updated to match the user administration header color */
+    margin-bottom: 20px; /* Spacing below headings */
 }
 
 p {
@@ -324,3 +325,44 @@ h2 {
     }
 }
 
+/* Form styling */
+.form-group input, .form-group select {
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+/* Improved button styles */
+button.btn:hover {
+  background-color: #483784; /* Slightly darker shade of purple */
+  transition: background-color 0.3s ease;
+}
+
+/* Table styling */
+.table-hover tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+thead.thead-dark th {
+  background-color: #5e489d;
+  color: white;
+  font-weight: bold;
+}
+
+/* Form container */
+.bg-white {
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* Add some shadow to form */
+.shadow {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.text-center mb-4{
+  background-color: #5e489d;
+}

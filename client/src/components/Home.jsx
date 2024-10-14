@@ -71,7 +71,7 @@ const Home = () => {
             <div className="navbar-nav mx-auto py-0">
               <Link to="/" className="nav-item nav-link active">Home</Link>
               <div>
-                <Link to="/assignments" className="nav-item nav-link">Admin</Link> 
+                <Link to="/admin" className="nav-item nav-link">Admin</Link> 
               </div>
               <div>
                 <Link to="/assignments" className="nav-item nav-link">Assignments</Link>  {/* @Kanayochi enter assignment page route */}  

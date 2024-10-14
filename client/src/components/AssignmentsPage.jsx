@@ -11,11 +11,12 @@ function AssignmentsPage() {
         const token = localStorage.getItem('token'); // Get the token from localStorage
         const role = localStorage.getItem('role'); // Get the role from localStorage
 
-        if (!token || role !== 'lecturer') {
+        /* Kanayochi what's going on bro crying emoji
+        if (!token ||  !== '1') {
             alert("Access denied. Only lecturers can view assignments.");
             navigate("/login"); // Redirect to login if not authorized
             return;
-        }
+        }*/
 
         // Fetch assignments with authentication
         axios.get("http://localhost:8000/assignments", {
