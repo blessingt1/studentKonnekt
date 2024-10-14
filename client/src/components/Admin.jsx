@@ -21,7 +21,7 @@ const Admin = ({ isLoggedIn, handleLogout }) => {
         .then(response => {
             setUsers(response.data);
         })
-        .catch(error => console.log("Error fetching users:", error));
+        .catch(error => alert("Error fetching users:", error));
     };
 
     useEffect(() => {
@@ -43,19 +43,19 @@ const Admin = ({ isLoggedIn, handleLogout }) => {
                 await axios.put(`http://localhost:8000/users/${editingUserId}`, formData, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                console.log('User updated');
+                alert('User updated');
             } else {
                 // Create new user
                 await axios.post('http://localhost:8000/users', formData, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                console.log('New user created');
+                alert('New user created');
             }
             setFormData({ first_name: '', last_name: '', email: '', password: '', role: '0' });
             setEditingUserId(null);
             fetchUsers(); // Refresh user list
         } catch (error) {
-            console.error('Error saving user:', error);
+            alert('Error saving user:', error);
         }
     };
 
