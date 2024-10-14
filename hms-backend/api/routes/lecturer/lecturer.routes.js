@@ -1,13 +1,11 @@
 import express from 'express';
-import { viewSubmissions, streamVideo, provideFeedback } from '../../controllers/lecturer.controller.js'; // Import the relevant controller functions
-import createAssignment from '../../controllers/assignment.js';
+import { viewAllSubmissions, viewSubmissions, streamVideo, provideFeedback } from '../../controllers/lecturer.controller.js'; // Import the relevant controller functions
 const router = express.Router();
 
-// Define the route for creating assignments
-//router.post('/', createAssignment);
-
+// Route for viewing all submissions
+router.get('/assignments/submissions', viewAllSubmissions);
 // Define the route for viewing submissions
-router.get('/assignments/:id/submissions', viewSubmissions);
+router.get('/assignments/:assignmentId/submissions', viewSubmissions);
 
 // Define the route for streaming video submissions
 router.get('/submissions/:submissionId/stream', streamVideo);
