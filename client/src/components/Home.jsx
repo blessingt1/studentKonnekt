@@ -44,9 +44,9 @@ const Home = () => {
       {/* Navbar Start */}
       <div className="container-fluid p-0">
         <nav className="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
-          <Link to="/" className="navbar-brand ml-lg-3 d-flex align-items-center"> {/* Added d-flex and align-items-center */}
+          <Link to="/" className="navbar-brand ml-lg-3 d-flex align-items-center">
             <img src="../media/nwuHeading.png" alt="Your Image Alt Text" className="mr-2" style={{width: '50px', height: '50px', paddingTop: '5px'}} /> 
-            <h1 className="m-0 text-uppercase" style={{ color: '#5e489d' }}><i className="fa fa-book-reader mr-3" style={{ fontsize: 'small', color: '#5e489d' }}></i>North West University</h1>
+            <h1 className="m-0 text-uppercase" style={{ color: '#5e489d' }}><i className="fa fa-book-reader mr-3" style={{ fontSize: 'small', color: '#5e489d' }}></i>North West University</h1>
           </Link>
           <button type="button" className="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
             <span className="navbar-toggler-icon"></span>
@@ -56,7 +56,7 @@ const Home = () => {
               <Link to="/" className="nav-item nav-link active">Home</Link>
               <div className="nav-item dropdown">
                 <a href="#" className="nav-link dropdown-toggle" onClick={toggleAdmin}>Admin</a>
-                <div className={`dropdown-menu m-0 ${isAdminOpen ? 'show' : ''}`}> {/* Collapse class */}
+                <div className={`dropdown-menu m-0 ${isAdminOpen ? 'show' : ''}`}>
                   <Link to="/assignments/list" className="dropdown-item">List</Link>
                   <Link to="/assignments/create" className="dropdown-item">Create</Link>
                   <Link to="/assignments/update" className="dropdown-item">Update</Link>
@@ -66,12 +66,12 @@ const Home = () => {
               </div>
               <div className="nav-item dropdown">
                 <a href="#" className="nav-link dropdown-toggle" onClick={toggleAssignments}>Assignments</a>
-                <div className={`dropdown-menu m-0 ${isAssignmentsOpen ? 'show' : ''}`}> {/* Collapse class */}
+                <div className={`dropdown-menu m-0 ${isAssignmentsOpen ? 'show' : ''}`}>
                   <Link to="/assignments/list" className="dropdown-item">List</Link>
                   <Link to="/assignments/create" className="dropdown-item">Create</Link>
                   <Link to="/assignments/update" className="dropdown-item">Update</Link>
                   <Link to="/assignments/delete" className="dropdown-item">Delete</Link>
-                  <Link to="/assignments/:assignmentId/submissions" className="dropdown-item">Submissions</Link>
+                  <Link to="/assignments/assignmentId/submissions" className="dropdown-item">Submissions</Link>
                 </div>
               </div>
               <a href="#about" className="nav-item nav-link">About</a>

@@ -19,6 +19,7 @@ function App() {
         {/* Protected routes */}
         <Route element={<ProtectedLayout />}>
           <Route path="/home" element={<Home />} />
+          <Route path="/assignments/submissions" element={<ListAssignmentVideo />} />
           <Route path="/assignments/:assignmentId/submissions" element={<ListAssignmentVideo />} /> {/* Dynamic route */}
         </Route>
 
