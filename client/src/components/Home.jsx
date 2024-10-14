@@ -71,10 +71,10 @@ const Home = () => {
             <div className="navbar-nav mx-auto py-0">
               <Link to="/" className="nav-item nav-link active">Home</Link>
               <div>
-                <Link to="/admin" className="nav-item nav-link">Admin</Link> {/* @Mohau enter admin page route */}
+                <Link to="/assignments" className="nav-item nav-link">Admin</Link> 
               </div>
               <div>
-                <Link to="/" className="nav-item nav-link">Assignments</Link>  {/* @Kanayochi enter assignment page route */}  
+                <Link to="/assignments" className="nav-item nav-link">Assignments</Link>  {/* @Kanayochi enter assignment page route */}  
               </div>
               <a href="#about" className="nav-item nav-link">About</a>
             </div>
