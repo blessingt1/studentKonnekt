@@ -240,118 +240,87 @@ body {
     text-align: left;
   }
 
-  /*styles for video submission and feedback components */
-  .video-submission-container {
+
+
+
+
+
+
+  .login-container {
     background-color: #ffffff;
+    width: 100%;
+    max-width: 400px;
     border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    margin-top: 2rem;
-  }
+}
 
-  .video-submission-title {
-    color: #5e489d;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-  }
+.form-control {
+    height: 45px;
+    padding: 10px;
+    font-size: 16px;
+}
 
-  .submission-details {
-    margin-bottom: 1.5rem;
-  }
+.btn {
+    height: 45px;
+    font-size: 16px;
+}
 
-  .video-player {
-    width: 100%;
-    max-width: 800px;
-    margin-bottom: 1.5rem;
-  }
-
-  .feedback-form label {
-    font-weight: 600;
-    color: #333;
-  }
-
-  .feedback-form textarea,
-  .feedback-form input[type="number"] {
-    width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-  }
-
-  .submit-feedback-btn {
-    background-color: #5e489d;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-
-  .submit-feedback-btn:hover {
-    background-color: #4a3a7a;
-  }
-
-  .submit-feedback-btn:disabled {
-    background-color: #9d9d9d;
-    cursor: not-allowed;
-  }
-
-  /* Styles for the submitted assignments list */
-  .submissions-list-container {
+body {
     background-color: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    margin-top: 2rem;
-  }
+}
 
-  .submissions-list-title {
-    color: #5e489d;
+h2 {
     font-weight: 700;
-    margin-bottom: 1.5rem;
-  }
-
-  .submission-item {
-    border: 1px solid #e0e0e0;
-    border-radius: 0.25rem;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    transition: background-color 0.3s ease;
-  }
-
-  .submission-item:hover {
-    background-color: #f8f9fa;
-  }
-
-  .submission-item h5 {
     color: #333;
-    margin-bottom: 0.5rem;
-  }
+}
 
-  .submission-item small {
-    color: #6c757d;
-  }
+p {
+    font-size: 14px;
+    color: #777;
+}
 
-  .view-badge {
-    background-color: #5e489d;
-    color: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 1rem;
-    font-size: 0.75rem;
-  }
+input::placeholder {
+    color: #aaa;
+    font-size: 14px;
+}
 
-  .loading-message,
-  .error-message {
-    text-align: center;
-    margin-top: 2rem;
-    font-size: 1.2rem;
-  }
+html{
+    background-color: white;
+}
 
-  .error-message {
-    color: #dc3545;
-  }
+/* General styles for forms */
+.container-fluid {
+    background-color: #f8f9fa; /* Light background for better contrast */
+}
 
+.bg-white {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
 
+h2 {
+    color: #007bff; /* Primary color for headings */
+    margin-bottom: 20px; /* Spacing below headings */
+}
+
+.form-control {
+    border-radius: 0.25rem; /* Rounded corners for inputs */
+    border: 1px solid #ced4da; /* Light border */
+}
+
+.btn-success {
+    color: #5e489d; /* Updated to new purple */
+    border: none; /* Remove border */
+}
+
+.btn-default {
+    background-color: #e9ecef; /* Light button */
+    color: #495057; /* Dark text */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .w-25 {
+        width: 90%; /* Full width on smaller screens */
+    }
+}
 

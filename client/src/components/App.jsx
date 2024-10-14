@@ -1,12 +1,19 @@
 import { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+//main App component responsible for routing between different pages like Login, Signup, and Home.
+
+import { useState } from 'react'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
 
 import Signup from './Signup'; 
 import Login from './Login'; 
 import Home from './Home'; 
 import ListAssignmentVideo from './ListAssignmentVideo';  
 import ProtectedLayout from './ProtectedLayout';
+import Admin from './Admin';
+import AssignmentsPage from './AssignmentsPage'; B_branch
 
 function App() {
   return (
@@ -19,8 +26,9 @@ function App() {
         {/* Protected routes */}
         <Route element={<ProtectedLayout />}>
           <Route path="/home" element={<Home />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/assignments" element={<AssignmentsPage />} />
           <Route path="/assignments/submissions" element={<ListAssignmentVideo />} />
-          <Route path="/assignments/:assignmentId/submissions" element={<ListAssignmentVideo />} /> {/* Dynamic route */}
         </Route>
 
         {/* Redirect all other routes to login */}
@@ -31,3 +39,4 @@ function App() {
 }
 
 export default App;
+
