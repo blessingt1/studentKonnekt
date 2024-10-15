@@ -131,8 +131,8 @@ const Admin = ({ isLoggedIn, handleLogout }) => {
             </button>
             <div className="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
                 <div className="navbar-nav mx-auto py-0">
-                <Link to="/" className="nav-item nav-link active">Home</Link>
-                <a href="#userListSection" className="nav-item nav-link" onClick={handleUserListClick}>User list</a>
+                <Link to="/" className="nav-item nav-link active" style={{ color: 'black', ':hover': { color: 'purple' } }}>Home</Link>
+                <a href="#userListSection" className="nav-item nav-link" onClick={handleUserListClick}>View Users</a>
                 </div>
             </div>
             </nav>
@@ -230,7 +230,7 @@ const Admin = ({ isLoggedIn, handleLogout }) => {
                                 <td>{user.email}</td>
                                 <td>{user.role}</td>
                                 <td>
-                                    <button onClick={(e) => { e.stopPropagation(); handleEdit(user); }} className="btn btn-warning mr-2" style={{ backgroundColor: '#5e489d', color: 'white' }}>Edit</button>
+                                    <button onClick={(e) => { e.stopPropagation(); handleEdit(user); window.scrollTo(0, 0); }} className="btn btn-warning mr-2" style={{ backgroundColor: '#5e489d', color: 'white' }}>Edit</button>
                                     <button onClick={(e) => handleDelete(user._id, e)} className="btn btn-danger">Delete</button>
                                 </td>
                             </tr>
