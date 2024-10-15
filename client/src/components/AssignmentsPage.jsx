@@ -5,7 +5,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom"; // Import use
 
 function AssignmentsPage() {
     const [assignments, setAssignments] = useState([]);
-    const [formData, setFormData] = useState({ title: '', description: '', due_date: '', subject: '' }); // Changed dueDate to due_date
+    const [formData, setFormData] = useState({ title: '', description: '', due_date: '', subject: '' }); // Ensure due_date is used
     const [editingAssignmentId, setEditingAssignmentId] = useState(null);
     const navigate = useNavigate(); // Hook for navigating programmatically
     const location = useLocation(); // Hook to access the current location
@@ -45,7 +45,16 @@ function AssignmentsPage() {
 
     // Fetch assignments
     const fetchAssignments = () => {
-        // ... existing fetch logic ...
+        const token = localStorage.getItem('token'); // Get the token from localStorage
+        axios.get("http://localhost:8000/assignments", {
+            headers: {
+                Authorization: `Bearer ${token}` // Attach token in request header
+            }
+        })
+        .then(response => {
+            setAssignments(response.data); // Update the state with fetched assignments
+        })
+        .catch(error => console.log("Error fetching assignments:", error));
     };
 
     // Handle input changes for form
@@ -80,7 +89,7 @@ function AssignmentsPage() {
                 });
                 alert('New assignment created');
             }
-            setFormData({ title: '', description: '', due_date: '', subject: '' }); // Changed dueDate to due_date
+            setFormData({ title: '', description: '', due_date: '', subject: '' }); // Reset form
             setEditingAssignmentId(null);
             fetchAssignments(); // Refresh assignment list
         } catch (error) {
@@ -104,16 +113,14 @@ function AssignmentsPage() {
     const handleDelete = async (assignmentId, e) => {
         e.stopPropagation(); // Prevent triggering row click
         const token = localStorage.getItem('token'); // Get the token from localStorage
-        const userId = localStorage.getItem('userId'); // Get the user ID from localStorage
         try {
             await axios.delete(`http://localhost:8000/assignments/${assignmentId}`, {
                 headers: { Authorization: `Bearer ${token}` },
-                data: { deletedBy: userId } // Pass the deletedBy field
             });
             alert('Assignment deleted');
             fetchAssignments(); // Refresh assignment list
         } catch (error) {
-            alert('Error deleting assignment: ' + error.response.data.error || error.message);
+            alert('Error deleting assignment: ' + (error.response ? error.response.data.error : error.message)); // Improved error handling
         }
     };
 
