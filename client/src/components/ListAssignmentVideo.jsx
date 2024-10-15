@@ -14,44 +14,12 @@ function ListAssignmentVideo() {
         fetchAssignmentAndSubmissions();
     }, [assignmentId]);
 
-    // Commenting out the checkSession function
-    /*
-    const checkSession = () => {
-        const token = localStorage.getItem('token');
-        const role = localStorage.getItem('role');
-        const expiryTime = localStorage.getItem('expiryTime');
-        const now = new Date().getTime();
-
-        console.log("Token:", token); // Debugging
-        console.log("Role:", role); // Debugging
-        console.log("Expiry Time:", expiryTime); // Debugging
-        console.log("Current Time:", now); // Debugging
-
-        // Check if the token is valid and session hasn't expired
-        if (!token || now >= expiryTime) {
-            setError('Session expired. Please log in again.');
-            navigate("/login");
-            return false;
-        }
-
-        if (role !== '0' && role !== '1') {
-            setError('Access denied. Only lecturers and admins can view submissions.');
-            return false;
-        }
-
-        return true;
-    };
-    */
-
     const fetchAssignmentAndSubmissions = async () => {
-        // if (!checkSession()) return; // Commenting out the session check
-
         setLoading(true);
         setError(null);
+        const token = localStorage.getItem('token');
 
         try {
-            const token = localStorage.getItem('token');
-            
             // Fetch assignment details
             const assignmentResponse = await axios.get(`http://localhost:8000/assignments/${assignmentId}`, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -62,7 +30,6 @@ function ListAssignmentVideo() {
             const submissionsResponse = await axios.get(`http://localhost:8000/assignments/${assignmentId}/submissions`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-
             setSubmissions(submissionsResponse.data.submissions || []);
         } catch (err) {
             console.error('Error fetching assignment and submissions:', err);

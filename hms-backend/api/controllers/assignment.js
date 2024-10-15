@@ -1,6 +1,7 @@
 import Assignment from '../models/Assignment.js';
 import mongoose from 'mongoose'; // Can be removed
 import User from '../models/User.js'; // Ensure you have this to check the user role
+import Submission from '../models/submission.model.js'; // Corrected import statement
 
 // Controller class for handling assignment-related operations
 export default class assignmentController {
@@ -121,6 +122,18 @@ export default class assignmentController {
 
             res.status(200).json({ message: 'Assignment deleted successfully' });
         } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    // Method to view submissions for a specific assignment
+    static async viewSubmissions(req, res) {
+        const assignmentId = req.params.assignmentId;
+        try {
+            const submissions = await Submission.find({ assignmentId }).exec(); // Fetch submissions for the assignment
+            res.status(200).json({ submissions });
+        } catch (err) {
+            console.log(err);
             res.status(500).json({ error: err.message });
         }
     }
