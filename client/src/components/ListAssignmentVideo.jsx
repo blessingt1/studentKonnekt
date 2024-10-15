@@ -5,13 +5,13 @@ import axios from 'axios';
 function ListAssignmentVideo() {
     const { assignmentId } = useParams();
     const [submissions, setSubmissions] = useState([]);
+    const [assignment, setAssignment] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [inputAssignmentId, setInputAssignmentId] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchSubmissions();
+        fetchAssignmentAndSubmissions();
     }, [assignmentId]);
 
     const checkSession = () => {
@@ -34,7 +34,7 @@ function ListAssignmentVideo() {
         return true;
     };
 
-    const fetchSubmissions = async () => {
+    const fetchAssignmentAndSubmissions = async () => {
         if (!checkSession()) return; 
 
         setLoading(true);
@@ -42,30 +42,24 @@ function ListAssignmentVideo() {
 
         try {
             const token = localStorage.getItem('token');
-            let url = 'http://localhost:8000/assignments/submissions';
-            if (assignmentId) {
-                url = `http://localhost:8000/assignments/${assignmentId}/submissions`;
-            }
+            
+            // Fetch assignment details
+            const assignmentResponse = await axios.get(`http://localhost:8000/assignments/${assignmentId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setAssignment(assignmentResponse.data);
 
-            const response = await axios.get(url, {
+            // Fetch submissions for the specific assignment
+            const submissionsResponse = await axios.get(`http://localhost:8000/assignments/${assignmentId}/submissions`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
-            setSubmissions(response.data.submissions || []);
+            setSubmissions(submissionsResponse.data.submissions || []);
         } catch (err) {
-            console.error('Error fetching submissions:', err);
-            setError('Failed to load submissions. Please try again.');
+            console.error('Error fetching assignment and submissions:', err);
+            setError('Failed to load assignment and submissions. Please try again.');
         } finally {
             setLoading(false);
-        }
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (inputAssignmentId) {
-            navigate(`/assignments/${inputAssignmentId}/submissions`);
-        } else {
-            navigate('/assignments/submissions');
         }
     };
 
@@ -73,38 +67,29 @@ function ListAssignmentVideo() {
     if (error) return <div className="error-message">{error}</div>;
 
     return (
-        <div className="submissions-list-container">
-            <h2 className="submissions-list-title">
-                {assignmentId ? `Submissions for Assignment ${assignmentId}` : 'All Submitted Assignments'}
-            </h2>
-            <form onSubmit={handleSubmit} className="mb-3">
-                <div className="input-group">
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Enter Assignment ID"
-                        value={inputAssignmentId}
-                        onChange={(e) => setInputAssignmentId(e.target.value)}
-                    />
-                    <div className="input-group-append">
-                        <button className="btn btn-primary" type="submit">
-                            {inputAssignmentId ? 'View Submissions' : 'View All Submissions'}
-                        </button>
-                    </div>
-                </div>
-            </form>
+        <div className="container mt-5">
+            <h2 className="mb-4">Submissions for Assignment: {assignment?.title}</h2>
+            <p><strong>Description:</strong> {assignment?.description}</p>
+            <Link to="/assignments" className="btn btn-secondary mb-3">Back to Assignments</Link>
             {submissions.length === 0 ? (
-                <p>No submitted assignments found.</p>
+                <p>No submissions found for this assignment.</p>
             ) : (
-                <div>
+                <div className="list-group">
                     {submissions.map((submission) => (
-                        <Link key={submission._id} to={`/submissions/${submission._id}`} className="submission-item">
-                            <div>
-                                <h5>{submission.assignment?.title || 'Untitled Assignment'}</h5>
-                                <small>Submitted by: {submission.student || 'Unknown Student'}</small>
+                        <div key={submission._id} className="list-group-item list-group-item-action">
+                            <div className="d-flex w-100 justify-content-between">
+                                <h5 className="mb-1">Submission by: {submission.student || 'Unknown Student'}</h5>
+                                <small>Submitted on: {new Date(submission.submissionDate).toLocaleString()}</small>
                             </div>
-                            <span className="view-badge">View</span>
-                        </Link>
+                            {submission.videoPath && (
+                                <div className="mt-2">
+                                    <video width="320" height="240" controls>
+                                        <source src={submission.videoPath} type="video/mp4" />
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                            )}
+                        </div>
                     ))}
                 </div>
             )}
