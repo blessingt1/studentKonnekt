@@ -1,37 +1,32 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import '../../styles/styles.css'; // Updated path for the CSS file
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import '../../styles/styles.css';
 
 function AssignmentsPage() {
     const [assignments, setAssignments] = useState([]);
-    const navigate = useNavigate(); // Hook for navigating programmatically
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem('token'); // Get the token from localStorage
-        const role = localStorage.getItem('role'); // Get the role from localStorage
+       const token = localStorage.getItem('token');
+        const role = localStorage.getItem('role');
 
-        if (!token || role !== 'lecturer') {
+        /*if (!token || role !== 'lecturer') {
             alert("Access denied. Only lecturers can view assignments.");
-            navigate("/login"); // Redirect to login if not authorized
+            navigate("/login");
             return;
-        }
+        }*/
 
-        // Fetch assignments with authentication
         axios.get("http://localhost:8000/assignments", {
             headers: {
-                Authorization: `Bearer ${token}` // Attach token in request header
+                Authorization: `Bearer ${token}`
             }
         })
         .then(response => {
-            setAssignments(response.data); // Update the state with fetched assignments
+            setAssignments(response.data);
         })
         .catch(error => console.log("Error fetching assignments:", error));
     }, [navigate]);
-
-    const handleRowClick = (assignmentId) => {
-        navigate(`/assignments/${assignmentId}`); // Redirect to detailed assignment page
-    };
 
     return (
         <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
@@ -49,7 +44,7 @@ function AssignmentsPage() {
                     <tbody>
                         {assignments.length > 0 ? (
                             assignments.map((assignment) => (
-                                <tr key={assignment._id} onClick={() => handleRowClick(assignment._id)}>
+                                <tr key={assignment._id}>
                                     <td>{assignment.title}</td>
                                     <td>{assignment.description}</td>
                                     <td>{new Date(assignment.dueDate).toLocaleDateString()}</td>
@@ -63,6 +58,12 @@ function AssignmentsPage() {
                         )}
                     </tbody>
                 </table>
+                {/* Create New Assignment Button */}
+                <div className="d-flex justify-content-end">
+                    <Link to="/assignments/create" className="btn btn-primary mt-3">
+                        Create New Assignment
+                    </Link>
+                </div>
             </div>
         </div>
     );

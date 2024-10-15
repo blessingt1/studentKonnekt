@@ -1,18 +1,9 @@
-// Main App component responsible for routing between different pages like Login, Signup, Home, and Assignments Page.
-
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-
-<<<<<<<< HEAD:client/src/App.jsx
-import Signup from './Signup';
-import Login from './Login';
-import Home from './Home';
-import AssignmentsPage from './AssignmentsPage'; // Importing the new Assignments Page component
-========
 import Signup from './Signup'; 
-import Login from './Login'; 
-import Home from './Home'; 
->>>>>>>> B_branch:client/src/components/App.jsx
+import Login from './Login';   
+import Home from './Home';     
+import AssignmentsPage from './AssignmentsPage';
+import CreateAssignmentPage from './CreateAssignmentPage'; // Import the Create Assignment Page
 
 function App() {
   return (
@@ -22,7 +13,8 @@ function App() {
         <Route path="/register" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/assignments" element={<AssignmentsPage />} /> {/* New route for the Assignments Page */}
+        <Route path="/assignments" element={<AssignmentsPage />} />
+        <Route path="/assignments/create" element={<CreateAssignmentPage />} /> {/* Add route for Create Assignment */}
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
