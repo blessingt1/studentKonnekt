@@ -7,6 +7,9 @@ import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
 import Signup from './Signup'; 
 import Login from './Login'; 
 import Home from './Home'; 
+import Admin from './Admin';
+import AssignmentsPage from './AssignmentsPage';
+import ListAssignmentVideo from './ListAssignmentVideo';
 
 function App() {
   return (
@@ -17,6 +20,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/home" element={<Home />} />
         <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="/assignments" element={<AssignmentsPage />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/assignmentSubmissions/:assignmentId" element={<ListAssignmentVideo />} />
+        <Route path="/assignmentSubmissions" element={<ListAssignmentVideo />} />
       </Routes>
     </BrowserRouter>
   )

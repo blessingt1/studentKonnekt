@@ -2,6 +2,7 @@
 import mongoose from 'mongoose';
 import Submission from '../models/submission.model.js'; 
 import User from '../models/User.js';
+import path from 'path';
 
 
 // View submissions for an assignment
@@ -30,7 +31,16 @@ export const streamVideo = async (req, res) => {
 
         // Assuming the video is stored as a file path in the submission document
         const videoPath = submission.videoPath;
-        res.sendFile(videoPath); // Stream the video
+
+        // Ensure videoPath is absolute
+        const absoluteVideoPath = path.resolve(videoPath);
+
+        // Stream the video
+        res.sendFile(absoluteVideoPath, (err) => {
+            if (err) {
+                res.status(err.status || 500).json({ error: err.message });
+            }
+        });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
