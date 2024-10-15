@@ -14,15 +14,23 @@ function ListAssignmentVideo() {
         fetchAssignmentAndSubmissions();
     }, [assignmentId]);
 
+    // Commenting out the checkSession function
+    /*
     const checkSession = () => {
         const token = localStorage.getItem('token');
         const role = localStorage.getItem('role');
         const expiryTime = localStorage.getItem('expiryTime');
         const now = new Date().getTime();
 
-        if (!token || now > expiryTime) {
-            localStorage.clear();  
-            navigate('/login'); 
+        console.log("Token:", token); // Debugging
+        console.log("Role:", role); // Debugging
+        console.log("Expiry Time:", expiryTime); // Debugging
+        console.log("Current Time:", now); // Debugging
+
+        // Check if the token is valid and session hasn't expired
+        if (!token || now >= expiryTime) {
+            setError('Session expired. Please log in again.');
+            navigate("/login");
             return false;
         }
 
@@ -33,9 +41,10 @@ function ListAssignmentVideo() {
 
         return true;
     };
+    */
 
     const fetchAssignmentAndSubmissions = async () => {
-        if (!checkSession()) return; 
+        // if (!checkSession()) return; // Commenting out the session check
 
         setLoading(true);
         setError(null);

@@ -5,7 +5,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom"; // Import use
 
 function AssignmentsPage() {
     const [assignments, setAssignments] = useState([]);
-    const [formData, setFormData] = useState({ title: '', description: '', due_date: '', subject: '' }); // Ensure due_date is used
+    const [formData, setFormData] = useState({ title: '', description: '', dueDate: '', subject: '' }); // Ensure dueDate is used
     const [editingAssignmentId, setEditingAssignmentId] = useState(null);
     const navigate = useNavigate(); // Hook for navigating programmatically
     const location = useLocation(); // Hook to access the current location
@@ -90,7 +90,7 @@ function AssignmentsPage() {
                 });
                 alert('New assignment created');
             }
-            setFormData({ title: '', description: '', due_date: '', subject: '' }); // Reset form
+            setFormData({ title: '', description: '', dueDate: '', subject: '' }); // Reset form
             setEditingAssignmentId(null);
             fetchAssignments(); // Refresh assignment list
         } catch (error) {
@@ -148,6 +148,17 @@ function AssignmentsPage() {
 
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Handle view submissions button click
+    const handleViewSubmissions = (assignmentId) => {
+        const token = localStorage.getItem('token'); // Get the token from localStorage
+        if (!token) {
+            alert("Access denied. Please log in to view submissions.");
+            navigate("/login"); // Redirect to login if not authorized
+        } else {
+            navigate(`/assignmentSubmissions/${assignmentId}`); // Navigate to the submissions page with assignmentId
+        }
     };
 
     return (
@@ -219,8 +230,8 @@ function AssignmentsPage() {
                 <input
                     type="date"
                     className="form-control"
-                    name="due_date" // Changed from dueDate to due_date
-                    value={formData.due_date} // Changed from dueDate to due_date
+                    name="dueDate" // Changed from due_date to dueDate
+                    value={formData.dueDate} // Changed from due_date to dueDate
                     onChange={handleChange}
                     required
                 />
@@ -272,7 +283,7 @@ function AssignmentsPage() {
                             <td>
                                 <button onClick={(e) => { e.stopPropagation(); handleEdit(assignment); window.scrollTo(0, 0); }} className="btn btn-warning mr-2" style={{ backgroundColor: '#5e489d', color: 'white' }}>Edit</button>
                                 <button onClick={(e) => handleDelete(assignment._id, e)} className="btn btn-danger">Delete</button>
-                                <Link to={`/submissions/${assignment._id}`} className="btn btn-success ml-2" style={{ backgroundColor: 'green', color: 'white' }}>View Submissions</Link>
+                                <button onClick={() => handleViewSubmissions(assignment._id)} className="btn btn-success ml-2" style={{ backgroundColor: 'green', color: 'white' }}>View Submissions</button>
                             </td>
                         </tr>
                     ))

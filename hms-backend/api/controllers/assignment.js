@@ -54,11 +54,13 @@ export default class assignmentController {
         try {
             const { title, description, dueDate, subject, createdBy } = req.body;
 
+
+            /*
             // Check if the user is a lecturer
             const user = await User.findById(createdBy);
             if (!user || user.role !== 1) { // Ensure user exists and is a lecturer
                 return res.status(403).json({ error: 'Access denied. Only a lecturer can create assignments.' });
-            }
+            }*/
 
             // Create and save the assignment
             const newAssignment = new Assignment({ title, description, dueDate, subject, createdBy });
@@ -78,9 +80,11 @@ export default class assignmentController {
         try {
             // Check if the user is a lecturer
             const user = await User.findById(updatedBy); // Assuming updatedBy is passed in req.body
+
+            /*
             if (!user || user.role !== 1) {
                 return res.status(403).json({ error: 'Access denied. Only a lecturer can update assignments.' });
-            }
+            }*/
 
             // Find and update the assignment
             const updatedAssignment = await Assignment.findByIdAndUpdate(

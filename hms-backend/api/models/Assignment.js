@@ -6,7 +6,7 @@ const assignmentSchema = new mongoose.Schema({
     title: { type: String, required: true }, // Assignment title, required
     description: { type: String, required: true }, // Assignment description, required
     subject: { type: String, required: true }, // Assignment subject, required
-    due_date: { type: Date, required: false }, // Assignment due date, required
+    dueDate: { type: Date, required: false }, // Changed from due_date to dueDate
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
