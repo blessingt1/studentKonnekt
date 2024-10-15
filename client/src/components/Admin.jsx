@@ -82,7 +82,7 @@ const Admin = ({ isLoggedIn, handleLogout }) => {
             fetchUsers(); // Refresh user list
             setSelectedUserId(null);
         } catch (error) {
-            alert('Error deleting user: ' + error);
+            alert('Error deleting user: ' + error.response.data.message || error.message); // Improved error handling
         }
     };
 

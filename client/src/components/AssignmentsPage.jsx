@@ -5,7 +5,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom"; // Import use
 
 function AssignmentsPage() {
     const [assignments, setAssignments] = useState([]);
-    const [formData, setFormData] = useState({ title: '', description: '', dueDate: '', subject: '' });
+    const [formData, setFormData] = useState({ title: '', description: '', due_date: '', subject: '' }); // Changed dueDate to due_date
     const [editingAssignmentId, setEditingAssignmentId] = useState(null);
     const navigate = useNavigate(); // Hook for navigating programmatically
     const location = useLocation(); // Hook to access the current location
@@ -57,25 +57,35 @@ function AssignmentsPage() {
     // Handle form submission for creating or updating assignments
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const token = localStorage.getItem('token'); // Get the token from localStorage
+        const userId = localStorage.getItem('userId'); // Assuming you store the user ID in localStorage
+
         try {
             if (editingAssignmentId) {
                 // Update assignment
-                await axios.put(`http://localhost:8000/assignments/${editingAssignmentId}`, formData, {
+                await axios.put(`http://localhost:8000/assignments/${editingAssignmentId}`, {
+                    ...formData,
+                    updatedBy: userId // Include updatedBy field
+                }, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 alert('Assignment updated');
             } else {
                 // Create new assignment
-                await axios.post('http://localhost:8000/assignments', formData, {
+                await axios.post('http://localhost:8000/assignments', {
+                    ...formData,
+                    createdBy: userId // Include createdBy field
+                }, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 alert('New assignment created');
             }
-            setFormData({ title: '', description: '', dueDate: '', subject: '' });
+            setFormData({ title: '', description: '', due_date: '', subject: '' }); // Changed dueDate to due_date
             setEditingAssignmentId(null);
             fetchAssignments(); // Refresh assignment list
         } catch (error) {
-            alert('Error saving assignment:', error);
+            console.error('Error saving assignment:', error.response ? error.response.data : error.message); // Log the error
+            alert('Error saving assignment: ' + (error.response ? error.response.data.error : error.message));
         }
     };
 
@@ -93,14 +103,17 @@ function AssignmentsPage() {
     // Handle delete button click
     const handleDelete = async (assignmentId, e) => {
         e.stopPropagation(); // Prevent triggering row click
+        const token = localStorage.getItem('token'); // Get the token from localStorage
+        const userId = localStorage.getItem('userId'); // Get the user ID from localStorage
         try {
             await axios.delete(`http://localhost:8000/assignments/${assignmentId}`, {
                 headers: { Authorization: `Bearer ${token}` },
+                data: { deletedBy: userId } // Pass the deletedBy field
             });
             alert('Assignment deleted');
             fetchAssignments(); // Refresh assignment list
         } catch (error) {
-            alert('Error deleting assignment: ' + error);
+            alert('Error deleting assignment: ' + error.response.data.error || error.message);
         }
     };
 
@@ -181,8 +194,8 @@ function AssignmentsPage() {
                 <input
                     type="date"
                     className="form-control"
-                    name="dueDate"
-                    value={formData.dueDate}
+                    name="due_date" // Changed from dueDate to due_date
+                    value={formData.due_date} // Changed from dueDate to due_date
                     onChange={handleChange}
                     required
                 />

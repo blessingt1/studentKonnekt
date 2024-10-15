@@ -103,21 +103,16 @@ export default {
         }
       },
     // Method to handle user deletion
-    deleteUser: async (req, res, next) => {
+    deleteUser: async (req, res) => {
+        const userId = req.params.id;
         try {
-            // Deleting a user by their ID
-            await User.deleteOne({ _id: req.params.userId }).exec();
-            // Returning a success response
-            res.status(200).json({
-                message: 'User deleted'
-            });
-    
-        } catch (err) {
-            console.log(err);
-            // Handling any errors during deletion
-            res.status(500).json({
-                error: err
-            });
+            const result = await User.findByIdAndDelete(userId); // Ensure this line is present
+            if (!result) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            res.status(200).json({ message: 'User deleted' });
+        } catch (error) {
+            res.status(500).json({ message: 'Error deleting user: ' + error.message });
         }
     },
 

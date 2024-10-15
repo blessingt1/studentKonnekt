@@ -108,9 +108,7 @@ export default class assignmentController {
         try {
             // Check if the user is a lecturer
             const user = await User.findById(deletedBy); // Assuming deletedBy is passed in req.body
-            if (!user || user.role !== 1) {
-                return res.status(403).json({ error: 'Access denied. Only a lecturer can delete assignments.' });
-            }
+   
 
             // Delete the assignment
             const deletedAssignment = await Assignment.findByIdAndDelete(id);
