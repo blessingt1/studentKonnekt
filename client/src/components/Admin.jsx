@@ -10,6 +10,7 @@ const Admin = ({ isLoggedIn, handleLogout }) => {
     const [selectedUserId, setSelectedUserId] = useState(null);
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
+    const [showScroll, setShowScroll] = useState(false); // State to control visibility of the button
 
     // Fetch users
     const fetchUsers = () => {
@@ -26,6 +27,19 @@ const Admin = ({ isLoggedIn, handleLogout }) => {
 
     useEffect(() => {
         fetchUsers(); // Fetch users on component mount
+    }, []);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 300) { // Show button after scrolling down 300px
+                setShowScroll(true);
+            } else {
+                setShowScroll(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     // Handle input changes
@@ -92,7 +106,7 @@ const Admin = ({ isLoggedIn, handleLogout }) => {
         setSelectedUserId(userId); // Set the selected user for delete button state
     };
 
-    // Handle user list click in navbar
+    // Add this function to handle scrolling to the user list section
     const handleUserListClick = () => {
         const userListSection = document.getElementById('userListSection');
         if (userListSection) {
@@ -100,8 +114,11 @@ const Admin = ({ isLoggedIn, handleLogout }) => {
         }
     };
 
-    return (
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
+    return (
         <>
         {/* Topbar Start */}
         <div className="container-fluid bg-dark">
@@ -243,6 +260,30 @@ const Admin = ({ isLoggedIn, handleLogout }) => {
                 </tbody>
             </table>
         </div>
+        <div style={{ height: '450px' }}></div>
+
+        {/* Back to Top Button */}
+        {showScroll && (
+            <button 
+                onClick={scrollToTop} 
+                className="back-to-top" 
+                style={{
+                    position: 'fixed',
+                    bottom: '20px',
+                    right: '20px',
+                    backgroundColor: 'black',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '5px',
+                    padding: '10px 15px',
+                    cursor: 'pointer',
+                    transition: 'opacity 0.3s',
+                    opacity: showScroll ? 1 : 0,
+                }}
+            >
+                Back to Top
+            </button>
+        )}
         </>
     );
 };

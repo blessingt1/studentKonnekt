@@ -9,6 +9,7 @@ function AssignmentsPage() {
     const [editingAssignmentId, setEditingAssignmentId] = useState(null);
     const navigate = useNavigate(); // Hook for navigating programmatically
     const location = useLocation(); // Hook to access the current location
+    const [showScroll, setShowScroll] = useState(false); // State to control visibility of the button
 
     useEffect(() => {
         const token = localStorage.getItem('token'); // Get the token from localStorage
@@ -130,6 +131,23 @@ function AssignmentsPage() {
         if (assignmentsTable) {
             assignmentsTable.scrollIntoView({ behavior: 'smooth' });
         }
+    };
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 300) { // Show button after scrolling down 300px
+                setShowScroll(true);
+            } else {
+                setShowScroll(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     return (
@@ -254,6 +272,7 @@ function AssignmentsPage() {
                             <td>
                                 <button onClick={(e) => { e.stopPropagation(); handleEdit(assignment); window.scrollTo(0, 0); }} className="btn btn-warning mr-2" style={{ backgroundColor: '#5e489d', color: 'white' }}>Edit</button>
                                 <button onClick={(e) => handleDelete(assignment._id, e)} className="btn btn-danger">Delete</button>
+                                <Link to={`/submissions/${assignment._id}`} className="btn btn-success ml-2" style={{ backgroundColor: 'green', color: 'white' }}>View Submissions</Link>
                             </td>
                         </tr>
                     ))
@@ -268,6 +287,28 @@ function AssignmentsPage() {
 
         <div style={{ height: '450px' }}></div>
 
+        {/* Back to Top Button */}
+        {showScroll && (
+                <button 
+                    onClick={scrollToTop} 
+                    className="back-to-top" 
+                    style={{
+                        position: 'fixed',
+                        bottom: '20px',
+                        right: '20px',
+                        backgroundColor: 'black',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '5px',
+                        padding: '10px 15px',
+                        cursor: 'pointer',
+                        transition: 'opacity 0.3s',
+                        opacity: showScroll ? 1 : 0,
+                    }}
+                >
+                    Back to Top
+                </button>
+            )}
         </>
     );
 }
