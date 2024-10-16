@@ -47,28 +47,40 @@ function ListAssignmentVideo() {
             <h2 className="mb-4">Submissions for Assignment: {assignment?.title}</h2>
             <p><strong>Description:</strong> {assignment?.description}</p>
             <Link to="/assignments" className="btn btn-secondary mb-3">Back to Assignments</Link>
-            {submissions.length === 0 ? (
-                <p>No submissions found for this assignment.</p>
-            ) : (
-                <div className="list-group">
-                    {submissions.map((submission) => (
-                        <div key={submission._id} className="list-group-item list-group-item-action">
-                            <div className="d-flex w-100 justify-content-between">
-                                <h5 className="mb-1">Submission by: {submission.student || 'Unknown Student'}</h5>
-                                <small>Submitted on: {new Date(submission.submissionDate).toLocaleString()}</small>
-                            </div>
-                            {submission.videoPath && (
-                                <div className="mt-2">
-                                    <video width="320" height="240" controls>
-                                        <source src={submission.videoPath} type="video/mp4" />
-                                        Your browser does not support the video tag.
-                                    </video>
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            )}
+            
+            {/* Submissions Table Start */}
+            <table className="table table-striped table-hover">
+                <thead className="thead-dark">
+                    <tr>
+                        <th>Student</th>
+                        <th>Submission Date</th>
+                        <th>Video</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {submissions.length === 0 ? (
+                        <tr>
+                            <td colSpan="3" className="text-center">No submissions found for this assignment.</td>
+                        </tr>
+                    ) : (
+                        submissions.map((submission) => (
+                            <tr key={submission._id}>
+                                <td>{submission.student || 'Unknown Student'}</td>
+                                <td>{new Date(submission.submissionDate).toLocaleString()}</td>
+                                <td>
+                                    {submission.videoPath && (
+                                        <video width="320" height="240" controls>
+                                            <source src={submission.videoPath} type="video/mp4" />
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    )}
+                                </td>
+                            </tr>
+                        ))
+                    )}
+                </tbody>
+            </table>
+            {/* Submissions Table End */}
         </div>
     );
 }

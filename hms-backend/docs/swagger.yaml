@@ -270,6 +270,26 @@ paths:
         '404':
           description: Assignment not found
 
+    delete:
+      summary: Delete an assignment by ID
+      security:
+        - BearerAuth: [] # Require authentication
+      parameters:
+        - name: assignmentId
+          in: path
+          required: true
+          description: ID of the assignment to delete
+          schema:
+            type: string
+            example: "66f4b6eae2928de285f8b969"
+      responses:
+        '200':
+          description: Assignment deleted successfully
+        '403':
+          description: Access denied
+        '404':
+          description: Assignment not found
+
   /feedback:
     post:
       summary: Create feedback for an assignment

@@ -21,8 +21,8 @@ function App() {
         <Route path="*" element={<Navigate to="/login" />} />
         <Route path="/assignments" element={<AssignmentsPage />} />
         <Route path="/admin" element={<Admin />} />
-        <Route path="/assignments/submissions" element={<ListAssignmentVideo />} />
-        <Route path="/assignments/:assignmentId/submissions" element={<ListAssignmentVideo />} />
+        <Route path="/assignmentSubmissions/:assignmentId" element={<ListAssignmentVideo />} />
+        <Route path="/assignmentSubmissions" element={<ListAssignmentVideo />} />
       </Routes>
     </BrowserRouter>
   )
