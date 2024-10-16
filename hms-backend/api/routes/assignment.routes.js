@@ -18,4 +18,7 @@ router.put('/:assignmentId', assignmentController.updateAssignment);  // PUT rou
 // Route to delete an assignment by ID
 router.delete('/:assignmentId', assignmentController.deleteAssignment);  // DELETE route for deleting assignments
 
+// Route to view submissions for a specific assignment
+router.get('/:assignmentId/submissions', assignmentController.viewSubmissions); // Added route for viewing submissions
+
 export default router;

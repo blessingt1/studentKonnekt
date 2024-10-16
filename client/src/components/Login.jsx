@@ -10,6 +10,7 @@ function Login() {
     const [password, setPassword] = useState(''); // State for password input
     const [isAdminOpen, setIsAdminOpen] = useState(false); // State for admin panel toggle
     const [isAssignmentsOpen, setIsAssignmentsOpen] = useState(false); // State for assignments panel toggle
+    const [userRole, setUserRole] = useState(null); // State to store the user's role
     const navigate = useNavigate(); // Using useNavigate hook for navigation
 
     const handleSubmit = (e) => {
@@ -24,13 +25,19 @@ function Login() {
             .then(result => {
                 if (result.data.token) {
                     localStorage.setItem('token', result.data.token); // Store token
-                    alert('Login successful!'); // Alerting the user of successful login
+                    const roleValue = parseInt(result.data.role, 10); // Parse the role value as an integer
+                    setUserRole(roleValue); // Store the user's role
+                    alert(`Login successful! Your role is: ${roleValue}`); // Alerting the user of successful login with their role
                     navigate('/'); // Redirect to home after login
                 } else {
                     alert(result.data.message || 'Login failed'); // Alerting the user if login fails
                 }
+            }).catch(error => {
+                console.error('Login error:', error); // Handling any errors during the request
+                alert('An error occurred during login.');
             });
     };
+
 
     const toggleAdmin = () => setIsAdminOpen(!isAdminOpen); // Function to toggle the admin panel
     const toggleAssignments = () => setIsAssignmentsOpen(!isAssignmentsOpen); // Function to toggle the assignments panel

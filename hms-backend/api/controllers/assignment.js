@@ -1,6 +1,7 @@
 import Assignment from '../models/Assignment.js';
 import mongoose from 'mongoose'; // Can be removed
 import User from '../models/User.js'; // Ensure you have this to check the user role
+import Submission from '../models/submission.model.js'; // Corrected import statement
 
 // Controller class for handling assignment-related operations
 export default class assignmentController {
@@ -54,12 +55,13 @@ export default class assignmentController {
         try {
             const { title, description, dueDate, subject, createdBy } = req.body;
 
+
+            /*
             // Check if the user is a lecturer
             const user = await User.findById(createdBy);
-
-            if (user.role !== 1) { // Assuming 1 represents 'lecturer'
+            if (!user || user.role !== 1) { // Ensure user exists and is a lecturer
                 return res.status(403).json({ error: 'Access denied. Only a lecturer can create assignments.' });
-            }
+            }*/
 
             // Create and save the assignment
             const newAssignment = new Assignment({ title, description, dueDate, subject, createdBy });
@@ -79,9 +81,11 @@ export default class assignmentController {
         try {
             // Check if the user is a lecturer
             const user = await User.findById(updatedBy); // Assuming updatedBy is passed in req.body
+
+            /*
             if (!user || user.role !== 1) {
                 return res.status(403).json({ error: 'Access denied. Only a lecturer can update assignments.' });
-            }
+            }*/
 
             // Find and update the assignment
             const updatedAssignment = await Assignment.findByIdAndUpdate(
@@ -108,9 +112,7 @@ export default class assignmentController {
         try {
             // Check if the user is a lecturer
             const user = await User.findById(deletedBy); // Assuming deletedBy is passed in req.body
-            if (!user || user.role !== 1) {
-                return res.status(403).json({ error: 'Access denied. Only a lecturer can delete assignments.' });
-            }
+   
 
             // Delete the assignment
             const deletedAssignment = await Assignment.findByIdAndDelete(id);
@@ -120,6 +122,18 @@ export default class assignmentController {
 
             res.status(200).json({ message: 'Assignment deleted successfully' });
         } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    // Method to view submissions for a specific assignment
+    static async viewSubmissions(req, res) {
+        const assignmentId = req.params.assignmentId;
+        try {
+            const submissions = await Submission.find({ assignmentId }).exec(); // Fetch submissions for the assignment
+            res.status(200).json({ submissions });
+        } catch (err) {
+            console.log(err);
             res.status(500).json({ error: err.message });
         }
     }
