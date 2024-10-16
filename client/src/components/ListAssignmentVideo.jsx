@@ -21,13 +21,13 @@ function ListAssignmentVideo() {
 
         try {
             // Fetch assignment details
-            const assignmentResponse = await axios.get(`http://localhost:8000/assignments/${assignmentId}`, {
+            const assignmentResponse = await axios.get(`https://studentkonnekt-backend-api.onrender.com/assignments/${assignmentId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setAssignment(assignmentResponse.data);
 
             // Fetch submissions for the specific assignment
-            const submissionsResponse = await axios.get(`http://localhost:8000/assignments/${assignmentId}/submissions`, {
+            const submissionsResponse = await axios.get(`https://studentkonnekt-backend-api.onrender.com/assignments/${assignmentId}/submissions`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setSubmissions(submissionsResponse.data.submissions || []);
@@ -43,6 +43,44 @@ function ListAssignmentVideo() {
     if (error) return <div className="error-message">{error}</div>;
 
     return (
+        <>
+        {/* Topbar Start */}
+        <div className="container-fluid bg-dark">
+            <div className="row py-2 px-lg-5">
+            <div className="col-lg-6 text-left text-lg-left mb-2 mb-lg-0">
+                <div className="d-inline-flex align-items-left text-white">
+                <small><i className="contact"></i>(+27 18) 299 1111</small>
+                <small className="contact">|</small>
+                <small><i className="contact"></i>studies@nwu.ac.za</small>
+                </div>
+            </div>
+            </div>
+        </div>
+        {/* Topbar End */}
+
+        {/* Navbar Start */}
+        <div className="container-fluid p-0">
+            <nav className="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
+            <Link to="/" className="navbar-brand ml-lg-3 d-flex align-items-center">
+                <img src="../media/nwuHeading.png" alt="Logo" className="mr-2" style={{ width: '50px', height: '50px', paddingTop: '5px' }} />
+                <h1 className="m-0 text-uppercase" style={{ color: '#5e489d' }}>
+                <i className="fa fa-book-reader mr-3" style={{ fontSize: 'small', color: '#5e489d' }}></i>User Administration
+                </h1>
+            </Link>
+            <button type="button" className="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span className="navbar-toggler-icon"></span>
+            </button>
+            <div className="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
+                <div className="navbar-nav mx-auto py-0">
+                <Link to="/" className="nav-item nav-link active" style={{ color: 'black', ':hover': { color: 'purple' } }}>Home</Link>
+                </div>
+            </div>
+            </nav>
+        </div>
+        {/* Navbar End */}
+
+
+
         <div className="container mt-5">
             <h2 className="mb-4">Submissions for Assignment: {assignment?.title}</h2>
             <p><strong>Description:</strong> {assignment?.description}</p>
@@ -70,6 +108,8 @@ function ListAssignmentVideo() {
                 </div>
             )}
         </div>
+
+        </>
     );
 }
 
