@@ -1,5 +1,4 @@
 //main App component responsible for routing between different pages like Login, Signup, and Home.
-
 import { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'

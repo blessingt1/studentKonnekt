@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/assignments', assignmentController.createAssignment); // Adjusted route for creating assignments
 
 // Define the route for viewing submissions
-router.get('/assignments/:id/submissions', viewSubmissions);
+router.get('/assignments/:assignmentId/submissions', viewSubmissions);
 
 // Define the route for streaming video submissions
 router.get('/submissions/:submissionId/stream', streamVideo);
