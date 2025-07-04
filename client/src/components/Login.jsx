@@ -25,6 +25,9 @@ function Login() {
             .then(result => {
                 if (result.data.token) {
                     localStorage.setItem('token', result.data.token); // Store token
+                    localStorage.setItem('userId', result.data.userId); // Store user ID
+                    localStorage.setItem('role', result.data.role); // Store user ID
+
                     let roleValue = parseInt(result.data.role, 10); // Parse the role value as an integer
                     switch(roleValue){
                         case 0: roleValue = 'admin'; // Assigning role based on the value
@@ -36,7 +39,7 @@ function Login() {
                         default: roleValue = 'unknown'; 
                     }
                     setUserRole(roleValue); // Store the user's role
-                    alert(`Login successful! Your role is: ${result.data.token}`); // Alerting the user of successful login with their role
+                    alert(`Login successful! Your role is: ${result.data.userId}`); // Alerting the user of successful login with their role
                     navigate('/'); // Redirect to home after login
                 } else {
                     alert(result.data.message || 'Login failed'); // Alerting the user if login fails
