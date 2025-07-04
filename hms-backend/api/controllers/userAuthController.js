@@ -84,6 +84,7 @@ export default {
       
             // Return a success response with the token
             return res.status(200).json({
+              userId: user._id,
               role: user.role,
               message: 'Authentication successful',
               token: token
