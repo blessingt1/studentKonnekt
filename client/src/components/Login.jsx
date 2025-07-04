@@ -91,11 +91,6 @@ function Login() {
                 <button type="button" className="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                <div className="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
-                    <div className="navbar-nav mx-auto py-0">
-                    <Link to="/" className="nav-item nav-link active">Home</Link>
-                    </div>
-                </div>
                 </nav>
             </div>
             {/* Navbar End */}
