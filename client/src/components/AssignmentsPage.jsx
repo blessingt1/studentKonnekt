@@ -6,48 +6,49 @@ import { Link, useNavigate, useLocation } from "react-router-dom"; // Import use
 function AssignmentsPage() {
     const [assignments, setAssignments] = useState([]);
     const [formData, setFormData] = useState({ title: '', description: '', dueDate: '', subject: '' }); // Ensure dueDate is used
-    const [editingAssignmentId, setEditingAssignmentId] = useState(null);
+    const [editingAssignmentId, setEditingAssignmentId] = useState(false);
     const navigate = useNavigate(); // Hook for navigating programmatically
     const location = useLocation(); // Hook to access the current location
     const [showScroll, setShowScroll] = useState(false); // State to control visibility of the button
+    const token = localStorage.getItem('token'); // Get the token from localStorage    
+    const userId = localStorage.getItem('userId'); // Get the userId from localStorage    
+    const role = localStorage.getItem('role'); // Get the role from localStorage    
+
 
     useEffect(() => {
-        const token = localStorage.getItem('token'); // Get the token from localStorage
-        const role = localStorage.getItem('role'); // Get the role from localStorage
-
 
         //Redirect if user is not a lecturer
-       
-        if(role !== '1' || role !== '0'){
-            alert("Access denied. Only lecturers and admins can view assignments.");
+        if(role == '1' || role == '0'){
+            // Fetch assignments with authentication
+            axios.get("http://localhost:8000/assignments", {
+                headers: {
+                    Authorization: `Bearer ${token}` // Attach token in request header
+                }
+            })
+            .then(response => {
+                setAssignments(response.data); // Update the state with fetched assignments
+            })
+            .catch(error => console.log("Error fetching assignments:", error));
+
+            // Scroll to assignments table if the URL hash is #assignments-table
+            if (location.hash === '#assignments-table') {
+                window.scrollTo({
+                    top: document.getElementById('assignments-table').offsetTop,
+                    behavior: 'smooth',
+                });
+            }
+         }else{
+            alert("Only lecturers and admins can view assignments. Your role is: " + role);
             navigate("/home"); // Redirect to home if not authorized/lecturer/adim
             return;
          }
         
 
-        // Fetch assignments with authentication
-        axios.get("http://localhost:8000/assignments", {
-            headers: {
-                Authorization: `Bearer ${token}` // Attach token in request header
-            }
-        })
-        .then(response => {
-            setAssignments(response.data); // Update the state with fetched assignments
-        })
-        .catch(error => console.log("Error fetching assignments:", error));
-
-        // Scroll to assignments table if the URL hash is #assignments-table
-        if (location.hash === '#assignments-table') {
-            window.scrollTo({
-                top: document.getElementById('assignments-table').offsetTop,
-                behavior: 'smooth',
-            });
-        }
+      
     }, [navigate, location]);
 
     // Fetch assignments
     const fetchAssignments = () => {
-        const token = localStorage.getItem('token'); // Get the token from localStorage
         axios.get("http://localhost:8000/assignments", {
             headers: {
                 Authorization: `Bearer ${token}` // Attach token in request header
@@ -68,8 +69,6 @@ function AssignmentsPage() {
     // Handle form submission for creating or updating assignments
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const token = localStorage.getItem('token'); // Get the token from localStorage
-        const userId = localStorage.getItem('userId'); // Assuming you store the user ID in localStorage
 
         try {
             if (editingAssignmentId) {
@@ -96,7 +95,7 @@ function AssignmentsPage() {
             fetchAssignments(); // Refresh assignment list
         } catch (error) {
             console.error('Error saving assignment:', error.response ? error.response.data : error.message); // Log the error
-            alert('Error saving assignment: ' + (error.message));
+            alert('Error saving assignment: ' + error.message );
         }
     };
 
@@ -114,7 +113,6 @@ function AssignmentsPage() {
     // Handle delete button click
     const handleDelete = async (assignmentId, e) => {
         e.stopPropagation(); // Prevent triggering row click
-        const token = localStorage.getItem('token'); // Get the token from localStorage
         try {
             await axios.delete(`http://localhost:8000/assignments/${assignmentId}`, {
                 headers: { Authorization: `Bearer ${token}` },
@@ -153,7 +151,6 @@ function AssignmentsPage() {
 
     // Handle view submissions button click
     const handleViewSubmissions = (assignmentId) => {
-        const token = localStorage.getItem('token'); // Get the token from localStorage
         if (!token) {
             alert("Access denied. Please log in to view submissions.");
             navigate("/login"); // Redirect to login if not authorized
