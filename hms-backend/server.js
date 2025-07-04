@@ -15,6 +15,10 @@ dotenv.config();
 const app = express();
 const port = 8000;
 
+app.get('/', (req, res) => {
+    res.send("Welcome to studentKonnekt API/v1");
+});
+
 // Middleware
 app.use(cors());
 app.use(express.json());

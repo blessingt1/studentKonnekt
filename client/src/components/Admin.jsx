@@ -9,6 +9,7 @@ const Admin = ({ isLoggedIn, handleLogout }) => {
     const [editingUserId, setEditingUserId] = useState(null);
     const [selectedUserId, setSelectedUserId] = useState(null);
     const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role'); // Get user role from localStorage
     const navigate = useNavigate();
     const [showScroll, setShowScroll] = useState(false); // State to control visibility of the button
 
@@ -26,7 +27,12 @@ const Admin = ({ isLoggedIn, handleLogout }) => {
     };
 
     useEffect(() => {
-        fetchUsers(); // Fetch users on component mount
+        if(role == 0){
+            fetchUsers(); // Fetch users on component mount
+        }else{
+            alert("You do not have permission to access this page.");
+            navigate("/home"); // Redirect to home if not authorized
+        }
     }, []);
 
     useEffect(() => {

@@ -130,7 +130,7 @@ function Signup() {
                         <div className="mb-3">
                             <label htmlFor="role"><strong>Role</strong></label>
                             <input type="text" 
-                                   placeholder='Enter Role (e.g., 2)' 
+                                   placeholder='Enter Role (0-2)' 
                                    autoComplete='off' 
                                    name='role' 
                                    className='form-control rounded-3' 
