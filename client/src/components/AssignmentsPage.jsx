@@ -16,13 +16,14 @@ function AssignmentsPage() {
         const role = localStorage.getItem('role'); // Get the role from localStorage
 
 
-        /*
-        // Redirect if user is not a lecturer
-        if (!token || role !== '1') {
-            alert("Access denied. Only lecturers can view assignments.");
-            navigate("/login"); // Redirect to login if not authorized
+        //Redirect if user is not a lecturer
+       
+        if(role !== '1' || role !== '0'){
+            alert("Access denied. Only lecturers and admins can view assignments.");
+            navigate("/home"); // Redirect to home if not authorized/lecturer/adim
             return;
-        }*/
+         }
+        
 
         // Fetch assignments with authentication
         axios.get("http://localhost:8000/assignments", {
@@ -95,7 +96,7 @@ function AssignmentsPage() {
             fetchAssignments(); // Refresh assignment list
         } catch (error) {
             console.error('Error saving assignment:', error.response ? error.response.data : error.message); // Log the error
-            alert('Error saving assignment: ' + (error.response ? error.response.data.error : error.message));
+            alert('Error saving assignment: ' + (error.message));
         }
     };
 

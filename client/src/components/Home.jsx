@@ -12,6 +12,10 @@ const Home = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token); // Update login state based on token presence
+
+    if(!isLoggedIn){
+      navigate("/login"); // Redirect to login if not logged in
+    }
   }, []); // Only run once when the component is mounted
 
   // Handle logout
@@ -19,7 +23,7 @@ const Home = () => {
       localStorage.removeItem('token'); // Clear the token
       alert("You have successfully logged out."); // Notify user
       setIsLoggedIn(false); // Update login state
-      navigate("/"); // Redirect to home page
+      navigate("/login"); // Redirect to home page
   };
 
   const toggleAssignments = () => {
