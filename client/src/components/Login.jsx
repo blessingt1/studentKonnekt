@@ -39,7 +39,7 @@ function Login() {
                         default: roleValue = 'unknown'; 
                     }
                     setUserRole(roleValue); // Store the user's role
-                    alert(`Login successful! Your role is: ${result.data.userId}`); // Alerting the user of successful login with their role
+                    alert(`Login successful, ${roleValue} access granted!`); // Alerting the user of successful login with their role
                     navigate('/'); // Redirect to home after login
                 } else {
                     alert(result.data.message || 'Login failed'); // Alerting the user if login fails
