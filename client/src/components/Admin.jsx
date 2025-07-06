@@ -15,7 +15,7 @@ const Admin = ({ isLoggedIn, handleLogout }) => {
 
     // Fetch users
     const fetchUsers = () => {
-        axios.get("http://localhost:8000/users", {
+        axios.get("https://studentkonnekt-backend-api.onrender.com/users", {
             headers: {
                 Authorization: `Bearer ${token}`,
             }
@@ -60,13 +60,13 @@ const Admin = ({ isLoggedIn, handleLogout }) => {
         try {
             if (editingUserId) {
                 // Update user
-                await axios.put(`http://localhost:8000/users/${editingUserId}`, formData, {
+                await axios.put(`https://studentkonnekt-backend-api.onrender.com/users/${editingUserId}`, formData, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 alert('User updated');
             } else {
                 // Create new user
-                await axios.post('http://localhost:8000/users', formData, {
+                await axios.post('https://studentkonnekt-backend-api.onrender.com/users', formData, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 alert('New user created');
@@ -95,7 +95,7 @@ const Admin = ({ isLoggedIn, handleLogout }) => {
     const handleDelete = async (userId, e) => {
         e.stopPropagation(); // Prevent triggering row click
         try {
-            await axios.delete(`http://localhost:8000/users/${userId}`, {
+            await axios.delete(`https://studentkonnekt-backend-api.onrender.com/users/${userId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             alert('User deleted');

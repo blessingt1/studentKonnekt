@@ -20,7 +20,7 @@ function AssignmentsPage() {
         //Redirect if user is not a lecturer
         if(role == '1' || role == '0'){
             // Fetch assignments with authentication
-            axios.get("http://localhost:8000/assignments", {
+            axios.get("https://studentkonnekt-backend-api.onrender.com/assignments", {
                 headers: {
                     Authorization: `Bearer ${token}` // Attach token in request header
                 }
@@ -49,7 +49,7 @@ function AssignmentsPage() {
 
     // Fetch assignments
     const fetchAssignments = () => {
-        axios.get("http://localhost:8000/assignments", {
+        axios.get("https://studentkonnekt-backend-api.onrender.com/assignments", {
             headers: {
                 Authorization: `Bearer ${token}` // Attach token in request header
             }
@@ -73,7 +73,7 @@ function AssignmentsPage() {
         try {
             if (editingAssignmentId) {
                 // Update assignment
-                await axios.put(`http://localhost:8000/assignments/${editingAssignmentId}`, {
+                await axios.put(`https://studentkonnekt-backend-api.onrender.com/assignments/${editingAssignmentId}`, {
                     ...formData,
                     updatedBy: userId // Include updatedBy field
                 }, {
@@ -82,7 +82,7 @@ function AssignmentsPage() {
                 alert('Assignment updated');
             } else {
                 // Create new assignment
-                await axios.post('http://localhost:8000/assignments', {
+                await axios.post('https://studentkonnekt-backend-api.onrender.com/assignments', {
                     ...formData,
                     createdBy: userId // Include createdBy field
                 }, {
@@ -114,7 +114,7 @@ function AssignmentsPage() {
     const handleDelete = async (assignmentId, e) => {
         e.stopPropagation(); // Prevent triggering row click
         try {
-            await axios.delete(`http://localhost:8000/assignments/${assignmentId}`, {
+            await axios.delete(`https://studentkonnekt-backend-api.onrender.com/assignments/${assignmentId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             alert('Assignment deleted');

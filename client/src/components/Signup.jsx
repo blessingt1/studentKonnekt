@@ -26,7 +26,7 @@ function Signup() {
             return;
         }
 
-        axios.post("http://localhost:8000/users/register", { first_name: firstName, last_name: lastName, email, password, role }) // Making a POST request to the register endpoint
+        axios.post("https://studentkonnekt-backend-api.onrender.com/users/register", { first_name: firstName, last_name: lastName, email, password, role }) // Making a POST request to the register endpoint
             .then(result => {
                 alert("Registration successful!"); // Alerting the user of successful registration
                 navigate("/login"); // Navigating to the login page after successful registration

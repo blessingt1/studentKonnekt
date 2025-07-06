@@ -21,13 +21,13 @@ function ListAssignmentVideo() {
 
         try {
             // Fetch assignment details
-            const assignmentResponse = await axios.get(`http://localhost:8000/assignments/${assignmentId}`, {
+            const assignmentResponse = await axios.get(`https://studentkonnekt-backend-api.onrender.com/assignments/${assignmentId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setAssignment(assignmentResponse.data);
 
             // Fetch submissions for the specific assignment
-            const submissionsResponse = await axios.get(`http://localhost:8000/assignments/${assignmentId}/submissions`, {
+            const submissionsResponse = await axios.get(`https://studentkonnekt-backend-api.onrender.com/assignments/${assignmentId}/submissions`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setSubmissions(submissionsResponse.data.submissions || []);

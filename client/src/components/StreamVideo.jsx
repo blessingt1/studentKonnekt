@@ -31,7 +31,7 @@ function VideoSubmissionFeedback() {
                 }
 
                 // Fetch the submission data from the server, including the Authorization token
-                const response = await axios.get(`http://localhost:8000/users/submissions/${submissionId}`, {
+                const response = await axios.get(`https://studentkonnekt-backend-api.onrender.com/users/submissions/${submissionId}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
@@ -68,7 +68,7 @@ function VideoSubmissionFeedback() {
             }
 
             // Submit feedback and marks to the server using a POST request
-            await axios.post(`http://localhost:8000/users/feedback`, 
+            await axios.post(`https://studentkonnekt-backend-api.onrender.com/users/feedback`, 
                 { submissionId, feedback, marks, lecturerId: userId },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -105,7 +105,7 @@ function VideoSubmissionFeedback() {
                     {/* Video player to stream the submitted video */}
                     <div className="video-player">
                         <video controls width="100%">
-                            <source src={`http://localhost:8000/submissions/stream/${submissionId}`} type="video/mp4" />
+                            <source src={`https://studentkonnekt-backend-api.onrender.com/submissions/stream/${submissionId}`} type="video/mp4" />
                             Your browser does not support the video tag.
                         </video>
                     </div>

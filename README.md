@@ -3,6 +3,7 @@
 Student Konnekt Human MoveMent Science Management System Backend API is a Node.js application designed for managing user authentication, assignments, feedback, and submissions in a Human Movement Science Management System.
 
 ## Table of Contents
+
 - [Installation](#installation)
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
@@ -12,6 +13,7 @@ Student Konnekt Human MoveMent Science Management System Backend API is a Node.j
 ## Installation
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/blessingt1/studentKonnekt.git
    cd hms-backend
@@ -19,19 +21,22 @@ Student Konnekt Human MoveMent Science Management System Backend API is a Node.j
 
 2. **Install dependencies:**
    Make sure you have [Node.js](https://nodejs.org/) installed. Then run:
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables:**
    Create a `.env` file in the root directory and add the following:
+
    ```
    JWT_KEY=secret
-   SWAGGER_URL=http://localhost:8000/api-docs
+   SWAGGER_URL=https://studentkonnekt-backend-api.onrender.com/api-docs
    ```
 
 4. **Run the application:**
    Use the following command to start the server:
+
    ```bash
    cd hms-backend
    npm start
@@ -42,7 +47,9 @@ Student Konnekt Human MoveMent Science Management System Backend API is a Node.j
 ## Usage
 
 ### Authentication
+
 - **Register a new user:**
+
   - **Endpoint:** `POST /users/register`
   - **Request Body:**
     ```json
@@ -66,7 +73,9 @@ Student Konnekt Human MoveMent Science Management System Backend API is a Node.j
     ```
 
 ### Assignments
+
 - **Get all assignments:**
+
   - **Endpoint:** `GET /assignments`
 
 - **Create a new assignment:**
@@ -83,6 +92,7 @@ Student Konnekt Human MoveMent Science Management System Backend API is a Node.j
     ```
 
 ### Feedback
+
 - **Create feedback for an assignment:**
   - **Endpoint:** `POST /feedback`
   - **Request Body:**
@@ -96,6 +106,7 @@ Student Konnekt Human MoveMent Science Management System Backend API is a Node.j
     ```
 
 ### Submissions
+
 - **Submit a selected video:**
   - **Endpoint:** `POST /submissions/selected`
   - **Request Body:** (multipart/form-data)
@@ -104,10 +115,13 @@ Student Konnekt Human MoveMent Science Management System Backend API is a Node.j
     - `video`: file
 
 ## API Endpoints
-Refer to the [Swagger documentation](http://localhost:8000/api-docs) for detailed API endpoints and their specifications.
+
+Refer to the [Swagger documentation](https://studentkonnekt-backend-api.onrender.com/api-docs) for detailed API endpoints and their specifications.
 
 ## Contributing
+
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update tests as appropriate.
 
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)

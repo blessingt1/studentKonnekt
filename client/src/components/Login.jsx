@@ -23,7 +23,7 @@ function Login() {
             return;
         }
 
-        axios.post("http://localhost:8000/users/login", { email, password }) // Making a POST request to the login endpoint
+        axios.post("https://studentkonnekt-backend-api.onrender.com/users/login", { email, password }) // Making a POST request to the login endpoint
             .then(result => {
                 if (result.data.token) {
                     localStorage.setItem('token', result.data.token); // Store token
