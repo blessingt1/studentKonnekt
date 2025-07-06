@@ -95,7 +95,7 @@ const Home = () => {
       {/* Header Start */}
       <div className="jumbotron jumbotron-fluid position-relative overlay-bottom" style={{ marginBottom: '90px', backgroundColor: '#5e489d' }}>
         <div className="container text-center my-5 py-5">
-          <h1 className="text-white mt-4 mb-4" style={{ fontSize: '2rem' }}>HMS</h1>
+          <h1 className="text-white mt-4 mb-4" style={{ fontSize: '2rem' }}>KBM</h1>
           <h1 className="text-white display-1 mb-5" style={{ fontSize: '2.5rem' }}>Management Platform</h1> 
           <div className="mx-auto mb-5" style={{ width: '100%', maxWidth: '600px' }}>
             <div className="input-group" >
