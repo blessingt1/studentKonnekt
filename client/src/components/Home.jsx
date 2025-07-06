@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'; // Added useEffect for tracking login state
 import { Link, useNavigate } from 'react-router-dom'; // Correct imports
 import '../../styles/styles.css'; // Importing the CSS file
+import nwuHeader from '../assets/images/nwuHeading.png'; // Importing NWU header image
+import studentKonnekt from '../assets/images/studentKonnekt.png'; // Importing student konnekt image
 
 const Home = () => {
   const [isAssignmentsOpen, setAssignmentsOpen] = useState(false); // State for Assignments dropdown
@@ -63,7 +65,7 @@ const Home = () => {
       <div className="container-fluid p-0">
         <nav className="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
           <Link to="/" className="navbar-brand ml-lg-3 d-flex align-items-center">
-            <img src="../media/nwuHeading.png" alt="Logo" className="mr-2" style={{ width: '50px', height: '50px', paddingTop: '5px' }} />
+            <img src={nwuHeader} alt="Logo" className="mr-2" style={{ width: '50px', height: '50px', paddingTop: '5px' }} />
             <h1 className="m-0 text-uppercase" style={{ color: '#5e489d' }}>
               <i className="fa fa-book-reader mr-3" style={{ fontSize: 'small', color: '#5e489d' }}></i>North West University
             </h1>
@@ -123,7 +125,7 @@ const Home = () => {
           <div className="row">
             <div className="col-lg-5 mb-5 mb-lg-0" style={{ minHeight: '200px', position: 'relative', paddingTop: '235px' }}>
               <div className="position-relative h-100">
-                <img className="position-absolute w-100 h-100" src="../../media/studentKonnekting.png" style={{ objectFit: 'contain', top: '0', left: '0' }} alt="About Us" />
+                <img className="position-absolute w-100 h-100" src={studentKonnekt} style={{ objectFit: 'contain', top: '0', left: '0' }} alt="About Us" />
               </div>
             </div>
             <div className="col-lg-7">
